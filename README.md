@@ -12,21 +12,23 @@ the execusion jouerny looks like this:
 `request -> routing -> middleware -> handler -> json response`
 
 ### the folder structure 
+
 ```bash
 ├── gincoat
-│   ├── config/ 
-│   ├── core/
-│   ├── httpd/
-│   │   ├── handlers/
-│   │   ├── middlewares/
-│   ├── routes.go
-│   ├── integrations/
-│   ├── logs/
-│   ├── models/
-│   ├── ssh/
+│   ├── config/ ---------------> app configuration
+│   ├── core/ -----------------> contains the core packages of the framework
+│   ├── httpd/-----------------> all http related functionalities go here 
+│   │   ├── handlers/ ---------> contains the requests handlers
+│   │   ├── middlewares/ ------> here you can puth your middlewares
+│   ├── routes.go -------------> app routes are defined here
+│   ├── integrations/ ---------> contains the integrations of third party packages into gin context
+│   ├── logs/ -----------------> log files
+│   ├── models/ ---------------> models
+│   ├── ssl/ ------------------> ssl certificates
 ├── .env
 └── .gitignore
 ├── go.mod
 ├── LICENSE
+├── main.go
 ├── README.md
 ```
