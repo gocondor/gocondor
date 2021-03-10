@@ -93,3 +93,21 @@ func (jl *JwtLoader) CreateRefreshToken(payload map[string]string) (string, erro
 
 	return token, nil
 }
+
+// DecodeToken decodes a given token and returns the payload
+// TODO: implement
+func DecodeToken(token string) (payload map[string]string, err error) {
+	return
+}
+
+// ValidateToken makes sure the given token is valid
+// TODO: implement
+func ValidateToken(token string) (isValid bool, err error) {
+	return
+}
+
+// RefreshToken generates a new token based on the refresh token
+// TODO: implement
+func RefreshToken(token string, refreshToken string) (newToken string, err error) {
+	return
+}
