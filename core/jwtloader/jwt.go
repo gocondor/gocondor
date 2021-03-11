@@ -7,9 +7,11 @@ package jwtloader
 import (
 	"errors"
 	"strconv"
+	"strings"
 	"time"
 
 	"github.com/dgrijalva/jwt-go"
+	"github.com/gin-gonic/gin"
 	"github.com/harranali/gincoat/core/env"
 )
 
@@ -92,6 +94,20 @@ func (jl *JwtLoader) CreateRefreshToken(payload map[string]string) (string, erro
 	}
 
 	return token, nil
+}
+
+//ExtractToken extracts the token from the request header
+func (jl JwtLoader) ExtractToken(c *gin.Context) (token string, err error) {
+	sentTokenSlice := c.Request.Header["Authorization"]
+	if len(sentTokenSlice) == 0 {
+		return "", errors.New("Missing authorization token")
+	}
+	sentTokenSlice = strings.Split(sentTokenSlice[0], " ")
+	if len(sentTokenSlice) != 2 {
+		return "", errors.New("Something wrong with the token")
+	}
+
+	return sentTokenSlice[1], nil
 }
 
 // DecodeToken decodes a given token and returns the payload
