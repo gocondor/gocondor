@@ -35,7 +35,7 @@ func Resolve() *JwtLoader {
 }
 
 // CreateToken generates new jwt token with the given payload
-func (jl *JwtLoader) CreateToken(payload map[string]string) (string, error) {
+func (j *JwtLoader) CreateToken(payload map[string]string) (string, error) {
 
 	claims := jwt.MapClaims{}
 
@@ -67,7 +67,7 @@ func (jl *JwtLoader) CreateToken(payload map[string]string) (string, error) {
 }
 
 // CreateRefreshToken generates new jwt refresh token with the given payload
-func (jl *JwtLoader) CreateRefreshToken(payload map[string]string) (string, error) {
+func (j *JwtLoader) CreateRefreshToken(payload map[string]interface{}) (string, error) {
 	claims := jwt.MapClaims{}
 
 	var duration time.Duration
@@ -98,7 +98,7 @@ func (jl *JwtLoader) CreateRefreshToken(payload map[string]string) (string, erro
 }
 
 //ExtractToken extracts the token from the request header
-func (jl *JwtLoader) ExtractToken(c *gin.Context) (token string, err error) {
+func (j *JwtLoader) ExtractToken(c *gin.Context) (token string, err error) {
 	sentTokenSlice := c.Request.Header["Authorization"]
 	if len(sentTokenSlice) == 0 {
 		return "", errors.New("Missing authorization token")
@@ -112,14 +112,27 @@ func (jl *JwtLoader) ExtractToken(c *gin.Context) (token string, err error) {
 }
 
 // DecodeToken decodes a given token and returns the payload
-// TODO: implement
-func DecodeToken(token string) (payload map[string]string, err error) {
+func (j *JwtLoader) DecodeToken(tokenString string) (payload map[string]interface{}, err error) {
+	// validate the token
+	_, err = j.ValidateToken(tokenString)
+	if err != nil {
+		return nil, err
+	}
 
-	return
+	//extract claims
+	token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
+		return []byte(env.Get("JWT_SECRET")), nil
+	})
+
+	claims := token.Claims.(jwt.MapClaims)
+	delete(claims, "authorized")
+	delete(claims, "exp")
+
+	return claims, nil
 }
 
 // ValidateToken makes sure the given token is valid
-func (jl *JwtLoader) ValidateToken(tokenString string) (bool, error) {
+func (j *JwtLoader) ValidateToken(tokenString string) (bool, error) {
 	// parse the token string
 	_, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
 		// validate the signing method
