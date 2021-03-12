@@ -6,6 +6,7 @@ package jwtloader
 
 import (
 	"errors"
+	"fmt"
 	"strconv"
 	"strings"
 	"time"
@@ -97,7 +98,7 @@ func (jl *JwtLoader) CreateRefreshToken(payload map[string]string) (string, erro
 }
 
 //ExtractToken extracts the token from the request header
-func (jl JwtLoader) ExtractToken(c *gin.Context) (token string, err error) {
+func (jl *JwtLoader) ExtractToken(c *gin.Context) (token string, err error) {
 	sentTokenSlice := c.Request.Header["Authorization"]
 	if len(sentTokenSlice) == 0 {
 		return "", errors.New("Missing authorization token")
@@ -113,13 +114,27 @@ func (jl JwtLoader) ExtractToken(c *gin.Context) (token string, err error) {
 // DecodeToken decodes a given token and returns the payload
 // TODO: implement
 func DecodeToken(token string) (payload map[string]string, err error) {
+
 	return
 }
 
 // ValidateToken makes sure the given token is valid
-// TODO: implement
-func ValidateToken(token string) (isValid bool, err error) {
-	return
+func (jl *JwtLoader) ValidateToken(tokenString string) (bool, error) {
+	// parse the token string
+	_, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
+		// validate the signing method
+		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
+			return nil, fmt.Errorf("invalid signing method: %s", token.Method.Alg())
+		}
+
+		return []byte(env.Get("JWT_SECRET")), nil
+	})
+
+	if err != nil {
+		return false, err
+	}
+
+	return true, nil
 }
 
 // RefreshToken generates a new token based on the refresh token
