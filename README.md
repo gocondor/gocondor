@@ -3,16 +3,23 @@
 ## [Under Deveopment]
 
 ### What's is Gincoat?
-Gincoat is a golang framework based on Gin framework with a style similar to Laravel's style for developing modern apis. it has an `MVC` like routing style, middlewares, database, authentication with jwt and more.
+Gincoat is a golang framework based on Gin framework with a style similar to Laravel's style, made for developing modern apis. it has an `MVC` like architecture.
 
-### The architecture
-the architecture is similar to MVC architecture, there is a `routes.go` file where you can defne all your routes and their `handlers`, a handler crosponds to controller action in `MVC`
-the execusion jouerny looks like this:
+### Features 
+- Router
+- Middlewares
+- JWT tokens
+- ORM
+- TLS 
+- Package Integrator
+
+### Architecture
+the architecture is similar to MVC architecture, there is a `routes.go` file where you can define all your routes and their `handlers`, a handler crosponds to controller action in `MVC`
+the request jouerny looks like this:
 
 `request -> routing -> middleware -> handler -> json response`
 
-### The folder structure 
-here is the directory structure of `Gincoat`
+### Folder structure 
 ```bash
 ├── gincoat
 │   ├── config/ ---------------> app configuration
@@ -25,10 +32,10 @@ here is the directory structure of `Gincoat`
 │   ├── logs/ -----------------> log files
 │   ├── models/ ---------------> models
 │   ├── ssl/ ------------------> ssl certificates
-├── .env ----------------------> environment variables 
-└── .gitignore ----------------> gitignore file
-├── go.mod --------------------> go modules the project depends on
-├── LICENSE -------------------> license
-├── main.go -------------------> ssl certificates
-├── README.md -----------------> readme file 
+│   ├── .env ------------------> environment variables 
+│   ├── .gitignore ----------------> gitignore file
+│   ├── go.mod --------------------> go modules the project depends on
+│   ├── LICENSE -------------------> license
+│   ├── main.go -------------------> ssl certificates
+│   ├── README.md -----------------> readme file
 ```
