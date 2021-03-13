@@ -6,10 +6,13 @@ package jwtloader
 
 import (
 	"errors"
+	"fmt"
 	"strconv"
+	"strings"
 	"time"
 
 	"github.com/dgrijalva/jwt-go"
+	"github.com/gin-gonic/gin"
 	"github.com/harranali/gincoat/core/env"
 )
 
@@ -32,7 +35,7 @@ func Resolve() *JwtLoader {
 }
 
 // CreateToken generates new jwt token with the given payload
-func (jl *JwtLoader) CreateToken(payload map[string]string) (string, error) {
+func (j *JwtLoader) CreateToken(payload map[string]string) (string, error) {
 
 	claims := jwt.MapClaims{}
 
@@ -64,7 +67,7 @@ func (jl *JwtLoader) CreateToken(payload map[string]string) (string, error) {
 }
 
 // CreateRefreshToken generates new jwt refresh token with the given payload
-func (jl *JwtLoader) CreateRefreshToken(payload map[string]string) (string, error) {
+func (j *JwtLoader) CreateRefreshToken(payload map[string]interface{}) (string, error) {
 	claims := jwt.MapClaims{}
 
 	var duration time.Duration
@@ -94,16 +97,57 @@ func (jl *JwtLoader) CreateRefreshToken(payload map[string]string) (string, erro
 	return token, nil
 }
 
+//ExtractToken extracts the token from the request header
+func (j *JwtLoader) ExtractToken(c *gin.Context) (token string, err error) {
+	sentTokenSlice := c.Request.Header["Authorization"]
+	if len(sentTokenSlice) == 0 {
+		return "", errors.New("Missing authorization token")
+	}
+	sentTokenSlice = strings.Split(sentTokenSlice[0], " ")
+	if len(sentTokenSlice) != 2 {
+		return "", errors.New("Something wrong with the token")
+	}
+
+	return sentTokenSlice[1], nil
+}
+
 // DecodeToken decodes a given token and returns the payload
-// TODO: implement
-func DecodeToken(token string) (payload map[string]string, err error) {
-	return
+func (j *JwtLoader) DecodeToken(tokenString string) (payload map[string]interface{}, err error) {
+	// validate the token
+	_, err = j.ValidateToken(tokenString)
+	if err != nil {
+		return nil, err
+	}
+
+	//extract claims
+	token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
+		return []byte(env.Get("JWT_SECRET")), nil
+	})
+
+	claims := token.Claims.(jwt.MapClaims)
+	delete(claims, "authorized")
+	delete(claims, "exp")
+
+	return claims, nil
 }
 
 // ValidateToken makes sure the given token is valid
-// TODO: implement
-func ValidateToken(token string) (isValid bool, err error) {
-	return
+func (j *JwtLoader) ValidateToken(tokenString string) (bool, error) {
+	// parse the token string
+	_, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
+		// validate the signing method
+		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
+			return nil, fmt.Errorf("invalid signing method: %s", token.Method.Alg())
+		}
+
+		return []byte(env.Get("JWT_SECRET")), nil
+	})
+
+	if err != nil {
+		return false, err
+	}
+
+	return true, nil
 }
 
 // RefreshToken generates a new token based on the refresh token
