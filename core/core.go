@@ -5,6 +5,7 @@
 package core
 
 import (
+	"fmt"
 	"io"
 	"os"
 	"strconv"
@@ -23,6 +24,12 @@ type App struct{}
 
 // DB represents Database variable name
 const DB = "db"
+
+// logs file path
+const logsFilePath = "logs/app.log"
+
+// logs file
+var logsFile *os.File
 
 // New initiates the app struct
 func New() *App {
@@ -61,8 +68,12 @@ func (app *App) Run(portNumber string) {
 	if portNumber == "" {
 		portNumber = "80"
 	}
-	//update log to file
-	logsFile, _ := os.Create("logs/app.log")
+
+	logsFile, err := os.OpenFile(logsFilePath, os.O_CREATE|os.O_APPEND|os.O_CREATE, 644)
+	if err != nil {
+		panic(err)
+	}
+	defer logsFile.Close()
 	gin.DefaultWriter = io.MultiWriter(logsFile, os.Stdout)
 
 	//initiate gin engines
@@ -104,7 +115,8 @@ func (app *App) Run(portNumber string) {
 		}()
 		redirectEngine := gin.New()
 		redirectEngine.Use(secureFunc)
-		redirectEngine.Run(":" + portNumber)
+		host := fmt.Sprintf("%s:%s", app.getHTTPHost(), portNumber)
+		redirectEngine.Run(host)
 	}
 
 	//serve the http version
@@ -112,7 +124,8 @@ func (app *App) Run(portNumber string) {
 	httpGinEngine = app.integratePackages(httpGinEngine)
 	router := routing.ResolveRouter()
 	httpGinEngine = app.registerRoutes(httpGinEngine, router)
-	httpGinEngine.Run(":" + portNumber)
+	host := fmt.Sprintf("%s:%s", app.getHTTPHost(), portNumber)
+	httpGinEngine.Run(host)
 }
 
 func (app *App) handleRoute(route routing.Route, ginEngine *gin.Engine) {
@@ -175,6 +188,15 @@ func (app *App) getHTTPSHost() string {
 	if host == "" {
 		host = env.Get("APP_HTTP_HOST")
 	}
+	//if both not set use local host
+	if host == "" {
+		host = "localhost"
+	}
+	return host
+}
+
+func (app *App) getHTTPHost() string {
+	host := env.Get("APP_HTTP_HOST")
 	//if both not set use local host
 	if host == "" {
 		host = "localhost"
