@@ -11,6 +11,7 @@ import (
 	"strconv"
 
 	"github.com/gin-gonic/gin"
+	"github.com/harranali/gincoat/core/cache"
 	"github.com/harranali/gincoat/core/database"
 	"github.com/harranali/gincoat/core/env"
 	"github.com/harranali/gincoat/core/middlewaresengine"
@@ -24,6 +25,9 @@ type App struct{}
 
 // DB represents Database variable name
 const DB = "db"
+
+// CACHE a cache engine variable
+const CACHE = "cache"
 
 // logs file path
 const logsFilePath = "logs/app.log"
@@ -56,10 +60,15 @@ func (app *App) Bootstrap() {
 	//initiate db connection
 	database.New()
 
-	//TODO support multible dbs
+	// initiate the cache
+	cache.New()
+
 	//register database driver
 	pkgintegrator.Resolve().Integrate(Mysql(database.Resolve()))
 
+	//register the cache
+	pkgintegrator.Resolve().Integrate(Cache(cache.Resolve()))
+	//TODO support multible dbs
 }
 
 // Run execute the app
