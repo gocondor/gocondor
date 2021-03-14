@@ -10,6 +10,7 @@ Gincoat is a golang framework based on Gin framework with a style similar to Lar
 - Middlewares
 - JWT tokens
 - ORM
+- Redis cache
 - TLS 
 - Package Integrator
 
