@@ -3,22 +3,29 @@
 ## [Under Deveopment]
 
 ### What's is Gincoat?
-Gincoat is a golang framework based on Gin framework with a style similar to Laravel's style, made for developing modern apis. it has an `MVC` like architecture.
+Gincoat is a golang framework based on Gin with a development experience similar to Laravel, made for developing modern apis and microservices. it has an `MVC` like architecture.
 
 ### Features 
 - Router
 - Middlewares
 - JWT tokens
-- ORM
+- Multiple database support
+- ORM (GORM)
+- MongoDB integration
 - Redis cache
-- TLS 
+- TLS
+- gRPC
 - Package Integrator
+- CLI with generators for files and code snippets
+- Development Server with hot reloading
+- Features Switch
 
 ### Architecture
-the architecture is similar to MVC architecture, there is a `routes.go` file where you can define all your routes and their `handlers`, a handler crosponds to controller action in `MVC`
-the request jouerny looks like this:
+the architecture is similar to `MVC` architecture, there is a `routes.go` file where you can define all your routes and their `handlers`, a handler crosponds to a controller action in `MVC`
 
-`request -> routing -> middleware -> handler -> json response`
+The request jouerny looks like this:
+
+`request -> routing -> middleware -> handler -> middleware -> json response`
 
 ### Folder structure 
 ```bash
