@@ -7,10 +7,12 @@ package database
 import (
 	"fmt"
 	"log"
+	"os"
 
 	"github.com/harranali/gincoat/core/env"
 	"gorm.io/driver/mysql"
 	"gorm.io/driver/postgres"
+	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
 )
 
@@ -33,6 +35,17 @@ func New() *gorm.DB {
 			log.Fatal(err)
 		}
 		return db
+	case "sqlite":
+		dbName := env.Get("SQLITE_FILE")
+		_, err := os.Stat("../../" + dbName)
+		if err != nil {
+			panic(err)
+		}
+		db, err = gorm.Open(sqlite.Open(dbName), &gorm.Config{})
+		if err != nil {
+			panic("failed to connect database")
+		}
+		return db
 	default:
 		db, err := prepareMysql()
 		if err != nil {
@@ -40,8 +53,6 @@ func New() *gorm.DB {
 		}
 		return db
 	}
-
-	return db
 }
 
 func preparePostgresql() (*gorm.DB, error) {
