@@ -28,7 +28,11 @@ func New() *gorm.DB {
 		}
 		return db
 	case "postgresql":
-
+		db, err := preparePostgresql()
+		if err != nil {
+			log.Fatal(err)
+		}
+		return db
 	default:
 		db, err := prepareMysql()
 		if err != nil {
