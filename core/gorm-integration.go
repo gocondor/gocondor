@@ -10,9 +10,9 @@ import (
 )
 
 //Mysql returns a gin handler func with db set in gin.Context
-func Mysql(db *gorm.DB) gin.HandlerFunc {
+func GORMIntegrator(gorm *gorm.DB) gin.HandlerFunc {
 	return func(c *gin.Context) {
-		c.Set("db", db)
+		c.Set("gorm", gorm)
 		c.Next()
 	}
 }

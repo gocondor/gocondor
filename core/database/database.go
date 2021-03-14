@@ -10,6 +10,7 @@ import (
 
 	"github.com/harranali/gincoat/core/env"
 	"gorm.io/driver/mysql"
+	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 )
 
@@ -21,26 +22,58 @@ func New() *gorm.DB {
 	//initiate database drier
 	switch env.Get("DB_DRIVER") {
 	case "mysql":
-		//example "root:@tcp(127.0.0.1:3306)/gincoat?charset=utf8mb4&parseTime=True&loc=Local"
-		dsn := fmt.Sprintf(
-			"%s:%s@tcp(%s:%s)/gincoat?charset=%s&parseTime=True&loc=Local",
-			env.Get("MYSQL_USERNAME"),
-			env.Get("MYSQL_PASSWORD"),
-			env.Get("MYSQL_HOST"),
-			env.Get("MYSQL_PORT"),
-			env.Get("MYSQL_CHARSET"),
-		)
-
-		db, err = gorm.Open(mysql.Open(dsn), &gorm.Config{})
-
+		db, err := prepareMysql()
 		if err != nil {
 			log.Fatal(err)
 		}
+		return db
+	case "postgresql":
 
+	default:
+		db, err := prepareMysql()
+		if err != nil {
+			log.Fatal(err)
+		}
 		return db
 	}
 
 	return db
+}
+
+func preparePostgresql() (*gorm.DB, error) {
+	dsn := fmt.Sprintf(
+		"host=%s user=%s password=%s dbname=%s port=%s sslmode=%s TimeZone=%s",
+		env.Get("POSTGRESQL_HOST"),
+		env.Get("POSTGRESQL_USERNAME"),
+		env.Get("POSTGRESQL_PASSWORD"),
+		env.Get("POSTGRESQL_DB_NAME"),
+		env.Get("POSTGRESQL_PORT"),
+		env.Get("POSTGRESQL_SSL_MODE"),
+		env.Get("POSTGRESQL_TIMEZONE"),
+	)
+	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
+	if err != nil {
+		return nil, err
+	}
+	return db, err
+}
+
+func prepareMysql() (*gorm.DB, error) {
+	dsn := fmt.Sprintf(
+		"%s:%s@tcp(%s:%s)/%s?charset=%s&parseTime=True&loc=Local",
+		env.Get("MYSQL_USERNAME"),
+		env.Get("MYSQL_PASSWORD"),
+		env.Get("MYSQL_HOST"),
+		env.Get("MYSQL_PORT"),
+		env.Get("MYSQL_DB_NAME"),
+		env.Get("MYSQL_CHARSET"),
+	)
+	db, err = gorm.Open(mysql.Open(dsn), &gorm.Config{})
+	if err != nil {
+		return nil, err
+	}
+
+	return db, nil
 }
 
 func Resolve() *gorm.DB {

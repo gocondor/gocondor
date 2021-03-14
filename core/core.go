@@ -24,7 +24,7 @@ import (
 type App struct{}
 
 // DB represents Database variable name
-const DB = "db"
+const GORM = "gorm"
 
 // CACHE a cache engine variable
 const CACHE = "cache"
@@ -64,7 +64,7 @@ func (app *App) Bootstrap() {
 	cache.New()
 
 	//register database driver
-	pkgintegrator.Resolve().Integrate(Mysql(database.Resolve()))
+	pkgintegrator.Resolve().Integrate(GORMIntegrator(database.Resolve()))
 
 	//register the cache
 	pkgintegrator.Resolve().Integrate(Cache(cache.Resolve()))
