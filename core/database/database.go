@@ -92,6 +92,5 @@ func prepareMysql() (*gorm.DB, error) {
 }
 
 func Resolve() *gorm.DB {
-	//create new db
 	return db
 }
