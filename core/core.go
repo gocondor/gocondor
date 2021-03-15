@@ -21,7 +21,9 @@ import (
 )
 
 // App struct
-type App struct{}
+type App struct {
+	Features *Features
+}
 
 // DB represents Database variable name
 const GORM = "gorm"
@@ -37,7 +39,9 @@ var logsFile *os.File
 
 // New initiates the app struct
 func New() *App {
-	return &App{}
+	return &App{
+		Features: &Features{},
+	}
 }
 
 //Bootstrap initiate app
@@ -57,18 +61,19 @@ func (app *App) Bootstrap() {
 	//initiate routing engine
 	routing.New()
 
-	//initiate db connection
-	database.New()
+	if app.Features.Database == true {
+		//initiate db connection
+		database.New()
+		//register database driver
+		pkgintegrator.Resolve().Integrate(GORMIntegrator(database.Resolve()))
+	}
 
-	// initiate the cache
-	cache.New()
-
-	//register database driver
-	pkgintegrator.Resolve().Integrate(GORMIntegrator(database.Resolve()))
-
-	//register the cache
-	pkgintegrator.Resolve().Integrate(Cache(cache.Resolve()))
-	//TODO support multible dbs
+	if app.Features.Cache == true {
+		// initiate the cache
+		cache.New()
+		//register the cache
+		pkgintegrator.Resolve().Integrate(Cache(cache.Resolve()))
+	}
 }
 
 // Run execute the app
@@ -173,6 +178,11 @@ func (app *App) integratePackages(engine *gin.Engine) *gin.Engine {
 	}
 
 	return engine
+}
+
+//FeaturesControl to control what features to turn on or off
+func (app *App) FeaturesControl(features *Features) {
+	app.Features = features
 }
 
 func (app *App) useMiddlewares(engine *gin.Engine) *gin.Engine {
