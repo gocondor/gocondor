@@ -1,8 +1,8 @@
 # Gincoat
 
-## [Under Deveopment]
+## [Under Development]
 
-### What's is Gincoat?
+### What is Gincoat?
 Gincoat is a golang framework based on Gin with a development experience similar to Laravel, made for developing modern apis and microservices. it has an `MVC` like architecture.
 
 ### Features 

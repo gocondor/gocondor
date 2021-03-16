@@ -25,7 +25,7 @@ type App struct {
 	Features *Features
 }
 
-// DB represents Database variable name
+// GORM is a const represents gorm variable name
 const GORM = "gorm"
 
 // CACHE a cache engine variable
@@ -78,7 +78,7 @@ func (app *App) Bootstrap() {
 
 // Run execute the app
 func (app *App) Run(portNumber string) {
-	//fallack to port number to 80 if not set
+	// fallback to port number to 80 if not set
 	if portNumber == "" {
 		portNumber = "80"
 	}
@@ -100,9 +100,8 @@ func (app *App) Run(portNumber string) {
 	if httpsOn {
 		//serve the https
 		httpsGinEngine = app.integratePackages(httpsGinEngine)
-		httpsGinEngine = app.integratePackages(httpsGinEngine)
 		router := routing.ResolveRouter()
-		httpsGinEngine = app.registerRoutes(httpsGinEngine, router)
+		httpsGinEngine = app.registerRoutes(router, httpsGinEngine)
 		certFile := env.Get("APP_HTTPS_CERT_FILE_PATH")
 		keyFile := env.Get("APP_HTTPS_KEY_FILE_PATH")
 		host := app.getHTTPSHost() + ":443"
@@ -118,12 +117,9 @@ func (app *App) Run(portNumber string) {
 					SSLHost:     app.getHTTPSHost() + ":443",
 				})
 				err := secureMiddleware.Process(c.Writer, c.Request)
-
-				// If there was an error, do not continue.
 				if err != nil {
 					return
 				}
-
 				c.Next()
 			}
 		}()
@@ -135,9 +131,8 @@ func (app *App) Run(portNumber string) {
 
 	//serve the http version
 	httpGinEngine = app.integratePackages(httpGinEngine)
-	httpGinEngine = app.integratePackages(httpGinEngine)
 	router := routing.ResolveRouter()
-	httpGinEngine = app.registerRoutes(httpGinEngine, router)
+	httpGinEngine = app.registerRoutes(router, httpGinEngine)
 	host := fmt.Sprintf("%s:%s", app.getHTTPHost(), portNumber)
 	httpGinEngine.Run(host)
 }
@@ -193,7 +188,7 @@ func (app *App) useMiddlewares(engine *gin.Engine) *gin.Engine {
 	return engine
 }
 
-func (app *App) registerRoutes(engine *gin.Engine, router *routing.Router) *gin.Engine {
+func (app *App) registerRoutes(router *routing.Router, engine *gin.Engine) *gin.Engine {
 	for _, route := range router.GetRoutes() {
 		app.handleRoute(route, engine)
 	}
