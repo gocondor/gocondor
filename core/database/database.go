@@ -11,7 +11,6 @@ import (
 
 	"github.com/harranali/gincoat/core/env"
 	"gorm.io/driver/mysql"
-	"gorm.io/driver/postgres"
 	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
 )
@@ -25,12 +24,6 @@ func New() *gorm.DB {
 	switch env.Get("DB_DRIVER") {
 	case "mysql":
 		db, err := prepareMysql()
-		if err != nil {
-			log.Fatal(err)
-		}
-		return db
-	case "postgresql":
-		db, err := preparePostgresql()
 		if err != nil {
 			log.Fatal(err)
 		}
@@ -53,24 +46,6 @@ func New() *gorm.DB {
 		}
 		return db
 	}
-}
-
-func preparePostgresql() (*gorm.DB, error) {
-	dsn := fmt.Sprintf(
-		"host=%s user=%s password=%s dbname=%s port=%s sslmode=%s TimeZone=%s",
-		env.Get("POSTGRESQL_HOST"),
-		env.Get("POSTGRESQL_USERNAME"),
-		env.Get("POSTGRESQL_PASSWORD"),
-		env.Get("POSTGRESQL_DB_NAME"),
-		env.Get("POSTGRESQL_PORT"),
-		env.Get("POSTGRESQL_SSL_MODE"),
-		env.Get("POSTGRESQL_TIMEZONE"),
-	)
-	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
-	if err != nil {
-		return nil, err
-	}
-	return db, err
 }
 
 func prepareMysql() (*gorm.DB, error) {
