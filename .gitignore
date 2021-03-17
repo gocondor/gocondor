@@ -1,4 +1,6 @@
 go.sum
 tmp/*
 logs/*
+!logs/.gitkeep
 ssl/*
+!ssl/.gitkeep
