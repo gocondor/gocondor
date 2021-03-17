@@ -1,4 +1,12 @@
-module github.com/harranali/gincoat
+module github.com/gincoat/gincoat
+
+replace (
+	github.com/gincoat/gincoat/config => ./config
+	github.com/gincoat/gincoat/httpd => ./httpd
+	github.com/gincoat/gincoat/httpd/middlewares => ./httpd/middlewares
+	github.com/gincoat/gincoat/integrations => ./integrations
+	github.com/gincoat/gincoat/models => ./models
+)
 
 go 1.16
 

@@ -13,7 +13,7 @@ import (
 
 	"github.com/dgrijalva/jwt-go"
 	"github.com/gin-gonic/gin"
-	"github.com/harranali/gincoat/core/env"
+	"github.com/gincoat/gincoat/core/env"
 )
 
 // JwtLoader pakcage struct

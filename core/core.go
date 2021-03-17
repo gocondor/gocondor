@@ -11,12 +11,12 @@ import (
 	"strconv"
 
 	"github.com/gin-gonic/gin"
-	"github.com/harranali/gincoat/core/cache"
-	"github.com/harranali/gincoat/core/database"
-	"github.com/harranali/gincoat/core/env"
-	"github.com/harranali/gincoat/core/middlewaresengine"
-	"github.com/harranali/gincoat/core/pkgintegrator"
-	"github.com/harranali/gincoat/core/routing"
+	"github.com/gincoat/gincoat/core/cache"
+	"github.com/gincoat/gincoat/core/database"
+	"github.com/gincoat/gincoat/core/env"
+	"github.com/gincoat/gincoat/core/middlewaresengine"
+	"github.com/gincoat/gincoat/core/pkgintegrator"
+	"github.com/gincoat/gincoat/core/routing"
 	"github.com/unrolled/secure"
 )
 

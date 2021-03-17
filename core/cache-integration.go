@@ -6,7 +6,7 @@ package core
 
 import (
 	"github.com/gin-gonic/gin"
-	"github.com/harranali/gincoat/core/cache"
+	"github.com/gincoat/gincoat/core/cache"
 )
 
 // Cache returns a gin handler func with cahce variable set in gin context

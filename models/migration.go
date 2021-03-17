@@ -4,7 +4,7 @@
 
 package models
 
-import "github.com/harranali/gincoat/core/database"
+import "github.com/gincoat/gincoat/core/database"
 
 //MigrateDB the database
 func MigrateDB() {
