@@ -5,13 +5,13 @@
 package main
 
 import (
-	"github.com/harranali/gincoat/config"
-	"github.com/harranali/gincoat/core"
-	"github.com/harranali/gincoat/core/env"
-	"github.com/harranali/gincoat/httpd"
-	"github.com/harranali/gincoat/httpd/middlewares"
-	"github.com/harranali/gincoat/integrations"
-	"github.com/harranali/gincoat/models"
+	"github.com/gincoat/gincoat/config"
+	"github.com/gincoat/gincoat/core"
+	"github.com/gincoat/gincoat/core/env"
+	"github.com/gincoat/gincoat/httpd"
+	"github.com/gincoat/gincoat/httpd/middlewares"
+	"github.com/gincoat/gincoat/integrations"
+	"github.com/gincoat/gincoat/models"
 )
 
 func main() {

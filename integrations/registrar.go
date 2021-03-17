@@ -4,7 +4,7 @@
 
 package integrations
 
-import "github.com/harranali/gincoat/core/pkgintegrator"
+import "github.com/gincoat/gincoat/core/pkgintegrator"
 
 // RegisterPKGIntegrations registers the integrations to gin.Context
 func RegisterPKGIntegrations() {

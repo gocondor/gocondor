@@ -1,7 +1,7 @@
 package config
 
 import (
-	"github.com/harranali/gincoat/core"
+	"github.com/gincoat/gincoat/core"
 )
 
 // Features to control Gincoat core features

@@ -9,7 +9,7 @@ import (
 	"log"
 	"os"
 
-	"github.com/harranali/gincoat/core/env"
+	"github.com/gincoat/gincoat/core/env"
 	"gorm.io/driver/mysql"
 	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"

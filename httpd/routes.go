@@ -5,8 +5,8 @@
 package httpd
 
 import (
-	"github.com/harranali/gincoat/core/routing"
-	"github.com/harranali/gincoat/httpd/handlers"
+	"github.com/gincoat/gincoat/core/routing"
+	"github.com/gincoat/gincoat/httpd/handlers"
 )
 
 //RegisterRoutes to register your routes
