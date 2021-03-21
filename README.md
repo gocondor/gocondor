@@ -20,6 +20,19 @@ Gincoat is a golang framework based on Gin with a development experience similar
 - Development Server with hot reloading
 - Features Switch
 
+### Install via `Gincoatinstaller`
+To install the Gincoat installer run the following command:
+```bash
+go get github.com/gincoat/gincoatinstaller
+```
+
+## Create a new project:
+To create a new project run the following command:
+```bash
+gincoatinstaller new my-project github.com/my-organization/my-project
+```
+
+
 ### Architecture
 the architecture is similar to `MVC` architecture, there is a `routes.go` file where you can define all your routes and their `handlers`, a handler crosponds to a controller action in `MVC`
 
