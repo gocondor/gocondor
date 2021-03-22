@@ -5,6 +5,7 @@ import (
 	"os"
 	"testing"
 
+	"github.com/gin-gonic/gin"
 	. "github.com/gincoat/gincoat/core"
 	"github.com/joho/godotenv"
 )
@@ -27,5 +28,14 @@ func TestSetEnv(t *testing.T) {
 
 	if os.Getenv("KEY_ONE") != "VAL_ONE" || os.Getenv("KEY_TWO") != "VAL_TWO" {
 		t.Errorf("failed to set env vars")
+	}
+}
+
+func TestSetAppMode(t *testing.T) {
+	app := New()
+	app.SetAppMode("release")
+
+	if gin.Mode() != gin.ReleaseMode {
+		t.Errorf("failed to set app mode")
 	}
 }
