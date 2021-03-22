@@ -9,11 +9,11 @@ import (
 	"io"
 	"os"
 	"strconv"
+	"strings"
 
 	"github.com/gin-gonic/gin"
 	"github.com/gincoat/gincoat/core/cache"
 	"github.com/gincoat/gincoat/core/database"
-	"github.com/gincoat/gincoat/core/env"
 	"github.com/gincoat/gincoat/core/middlewaresengine"
 	"github.com/gincoat/gincoat/core/pkgintegrator"
 	"github.com/gincoat/gincoat/core/routing"
@@ -44,14 +44,15 @@ func New() *App {
 	}
 }
 
+// SetEnv sets environment varialbes
+func (app *App) SetEnv(env map[string]string) {
+	for key, val := range env {
+		os.Setenv(strings.TrimSpace(key), strings.TrimSpace(val))
+	}
+}
+
 //Bootstrap initiate app
 func (app *App) Bootstrap() {
-	// set the app mode
-	setAppMode()
-
-	//load env vars
-	env.Load()
-
 	//initiate package integrator
 	pkgintegrator.New()
 
@@ -61,19 +62,11 @@ func (app *App) Bootstrap() {
 	//initiate routing engine
 	routing.New()
 
-	if app.Features.Database == true {
-		//initiate db connection
-		database.New()
-		//register database driver
-		pkgintegrator.Resolve().Integrate(GORMIntegrator(database.Resolve()))
-	}
+	//initiate db connection
+	database.New()
 
-	if app.Features.Cache == true {
-		// initiate the cache
-		cache.New()
-		//register the cache
-		pkgintegrator.Resolve().Integrate(Cache(cache.Resolve()))
-	}
+	// initiate the cache
+	cache.New()
 }
 
 // Run execute the app
@@ -94,16 +87,16 @@ func (app *App) Run(portNumber string) {
 	httpGinEngine := gin.Default()
 	httpsGinEngine := gin.Default()
 
-	httpsOn, _ := strconv.ParseBool(env.Get("APP_HTTPS_ON"))
-	redirectToHTTPS, _ := strconv.ParseBool(env.Get("APP_REDIRECT_HTTP_TO_HTTPS"))
+	httpsOn, _ := strconv.ParseBool(os.Getenv("APP_HTTPS_ON"))
+	redirectToHTTPS, _ := strconv.ParseBool(os.Getenv("APP_REDIRECT_HTTP_TO_HTTPS"))
 
 	if httpsOn {
 		//serve the https
 		httpsGinEngine = app.integratePackages(httpsGinEngine)
 		router := routing.ResolveRouter()
 		httpsGinEngine = app.registerRoutes(router, httpsGinEngine)
-		certFile := env.Get("APP_HTTPS_CERT_FILE_PATH")
-		keyFile := env.Get("APP_HTTPS_KEY_FILE_PATH")
+		certFile := os.Getenv("APP_HTTPS_CERT_FILE_PATH")
+		keyFile := os.Getenv("APP_HTTPS_KEY_FILE_PATH")
 		host := app.getHTTPSHost() + ":443"
 		go httpsGinEngine.RunTLS(host, certFile, keyFile)
 	}
@@ -156,14 +149,11 @@ func (app *App) handleRoute(route routing.Route, ginEngine *gin.Engine) {
 	}
 }
 
-func setAppMode() {
-	mode := os.Getenv("MODE")
-	if mode == "release" {
-		gin.SetMode(gin.ReleaseMode)
-	} else if mode == "test" {
-		gin.SetMode(gin.TestMode)
+func (app *App) SetAppMode(mode string) {
+	if mode == gin.ReleaseMode || mode == gin.TestMode || mode == gin.DebugMode {
+		gin.SetMode(mode)
 	} else {
-		gin.SetMode(gin.DebugMode)
+		gin.SetMode(gin.TestMode)
 	}
 }
 
@@ -197,10 +187,10 @@ func (app *App) registerRoutes(router *routing.Router, engine *gin.Engine) *gin.
 }
 
 func (app *App) getHTTPSHost() string {
-	host := env.Get("APP_HTTPS_HOST")
+	host := os.Getenv("APP_HTTPS_HOST")
 	//if not set get http instead
 	if host == "" {
-		host = env.Get("APP_HTTP_HOST")
+		host = os.Getenv("APP_HTTP_HOST")
 	}
 	//if both not set use local host
 	if host == "" {
@@ -210,7 +200,7 @@ func (app *App) getHTTPSHost() string {
 }
 
 func (app *App) getHTTPHost() string {
-	host := env.Get("APP_HTTP_HOST")
+	host := os.Getenv("APP_HTTP_HOST")
 	//if both not set use local host
 	if host == "" {
 		host = "localhost"

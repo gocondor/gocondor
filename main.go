@@ -5,24 +5,50 @@
 package main
 
 import (
+	"log"
+	"os"
+
 	"github.com/gincoat/gincoat/config"
 	"github.com/gincoat/gincoat/core"
-	"github.com/gincoat/gincoat/core/env"
+	"github.com/gincoat/gincoat/core/cache"
+	"github.com/gincoat/gincoat/core/database"
+	"github.com/gincoat/gincoat/core/pkgintegrator"
 	"github.com/gincoat/gincoat/httpd"
 	"github.com/gincoat/gincoat/httpd/middlewares"
 	"github.com/gincoat/gincoat/integrations"
 	"github.com/gincoat/gincoat/models"
+	"github.com/joho/godotenv"
 )
 
 func main() {
-	// Initiate app
+	// New initializes new App variable
 	app := core.New()
+
+	// set env
+	env, err := godotenv.Read(".env")
+	if err != nil {
+		log.Fatal("Error loading .env file")
+	}
+	app.SetEnv(env)
+
+	// set the app mode
+	app.SetAppMode(os.Getenv("APP_MODE"))
 
 	// What features to turn on or off
 	app.FeaturesControl(config.Features)
 
-	// Bootstrap dependencies
+	// initialize core packages
 	app.Bootstrap()
+
+	//register database driver
+	if app.Features.Database == true {
+		pkgintegrator.Resolve().Integrate(core.GORMIntegrator(database.Resolve()))
+	}
+
+	//register the cache
+	if app.Features.Cache == true {
+		pkgintegrator.Resolve().Integrate(core.Cache(cache.Resolve()))
+	}
 
 	// Register packages integrations
 	integrations.RegisterPKGIntegrations()
@@ -33,11 +59,11 @@ func main() {
 	// Register routes
 	httpd.RegisterRoutes()
 
+	//auto migrate tables
 	if config.Features.Database == true {
-		//auto migrate tables
 		models.MigrateDB()
 	}
 
 	// Run App
-	app.Run(env.Get("APP_HTTP_PORT"))
+	app.Run(os.Getenv("APP_HTTP_PORT"))
 }

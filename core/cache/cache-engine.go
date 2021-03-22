@@ -6,10 +6,10 @@ package cache
 
 import (
 	"context"
+	"os"
 	"strconv"
 	"time"
 
-	"github.com/gincoat/gincoat/core/env"
 	"github.com/go-redis/redis/v8"
 )
 
@@ -29,7 +29,7 @@ var cEngine *CacheEngine
 // New initiates a new caching engine
 func New() *CacheEngine {
 	redisCTX = context.Background()
-	ttl, _ := strconv.ParseUint(env.Get("REDIS_TTL_SECONDS"), 10, 64)
+	ttl, _ := strconv.ParseUint(os.Getenv("REDIS_TTL_SECONDS"), 10, 64)
 	redisTTL = time.Duration(ttl)
 
 	cEngine = &CacheEngine{
