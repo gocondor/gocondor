@@ -7,13 +7,13 @@ package jwtloader
 import (
 	"errors"
 	"fmt"
+	"os"
 	"strconv"
 	"strings"
 	"time"
 
 	"github.com/dgrijalva/jwt-go"
 	"github.com/gin-gonic/gin"
-	"github.com/gincoat/gincoat/core/env"
 )
 
 // JwtLoader pakcage struct
@@ -40,7 +40,7 @@ func (j *JwtLoader) CreateToken(payload map[string]string) (string, error) {
 	claims := jwt.MapClaims{}
 
 	var duration time.Duration
-	durationStr := env.Get("JWT_LIFESPAN_MINUTES")
+	durationStr := os.Getenv("JWT_LIFESPAN_MINUTES")
 	if durationStr == "" {
 		duration = defaultLifeSpan
 	} else {
@@ -54,7 +54,7 @@ func (j *JwtLoader) CreateToken(payload map[string]string) (string, error) {
 	claims["authorized"] = true
 	claims["exp"] = time.Now().Add(time.Minute * duration).Unix()
 	jwtToken := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
-	secret := env.Get("JWT_SECRET")
+	secret := os.Getenv("JWT_SECRET")
 	if secret == "" {
 		return "", errors.New("missing jwt token secret")
 	}
@@ -71,7 +71,7 @@ func (j *JwtLoader) CreateRefreshToken(payload map[string]interface{}) (string, 
 	claims := jwt.MapClaims{}
 
 	var duration time.Duration
-	durationStr := env.Get("JWT_REFRESH_TOKEN_LIFESPAN_HOURS")
+	durationStr := os.Getenv("JWT_REFRESH_TOKEN_LIFESPAN_HOURS")
 	if durationStr == "" {
 		duration = defaultRefreshTokenLifeSpan
 	} else {
@@ -85,7 +85,7 @@ func (j *JwtLoader) CreateRefreshToken(payload map[string]interface{}) (string, 
 	claims["refresh"] = true
 	claims["exp"] = time.Now().Add(time.Hour * duration).Unix()
 	jwtToken := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
-	secret := env.Get("JWT_REFRESH_TOKEN_SECRET")
+	secret := os.Getenv("JWT_REFRESH_TOKEN_SECRET")
 	if secret == "" {
 		return "", errors.New("missing jwt token refresh secret")
 	}
@@ -121,7 +121,7 @@ func (j *JwtLoader) DecodeToken(tokenString string) (payload map[string]interfac
 
 	//extract claims
 	token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
-		return []byte(env.Get("JWT_SECRET")), nil
+		return []byte(os.Getenv("JWT_SECRET")), nil
 	})
 
 	claims := token.Claims.(jwt.MapClaims)
@@ -140,7 +140,7 @@ func (j *JwtLoader) ValidateToken(tokenString string) (bool, error) {
 			return nil, fmt.Errorf("invalid signing method: %s", token.Method.Alg())
 		}
 
-		return []byte(env.Get("JWT_SECRET")), nil
+		return []byte(os.Getenv("JWT_SECRET")), nil
 	})
 
 	if err != nil {
