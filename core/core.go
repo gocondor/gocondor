@@ -92,7 +92,7 @@ func (app *App) Run(portNumber string) {
 
 	if httpsOn {
 		//serve the https
-		httpsGinEngine = app.integratePackages(httpsGinEngine)
+		httpsGinEngine = app.IntegratePackages(httpsGinEngine, pkgintegrator.Resolve().GetIntegrations())
 		router := routing.ResolveRouter()
 		httpsGinEngine = app.registerRoutes(router, httpsGinEngine)
 		certFile := os.Getenv("APP_HTTPS_CERT_FILE_PATH")
@@ -123,7 +123,7 @@ func (app *App) Run(portNumber string) {
 	}
 
 	//serve the http version
-	httpGinEngine = app.integratePackages(httpGinEngine)
+	httpGinEngine = app.IntegratePackages(httpGinEngine, pkgintegrator.Resolve().GetIntegrations())
 	router := routing.ResolveRouter()
 	httpGinEngine = app.registerRoutes(router, httpGinEngine)
 	host := fmt.Sprintf("%s:%s", app.getHTTPHost(), portNumber)
@@ -157,8 +157,8 @@ func (app *App) SetAppMode(mode string) {
 	}
 }
 
-func (app *App) integratePackages(engine *gin.Engine) *gin.Engine {
-	for _, pkgIntegration := range pkgintegrator.Resolve().GetIntegrations() {
+func (app *App) IntegratePackages(engine *gin.Engine, handlerFuncs []gin.HandlerFunc) *gin.Engine {
+	for _, pkgIntegration := range handlerFuncs {
 		engine.Use(pkgIntegration)
 	}
 
