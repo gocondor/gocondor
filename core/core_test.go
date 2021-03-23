@@ -1,7 +1,9 @@
 package core_test
 
 import (
+	"encoding/json"
 	"fmt"
+	"io/ioutil"
 	"log"
 	"net/http"
 	"net/http/httptest"
@@ -10,6 +12,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 	. "github.com/gincoat/gincoat/core"
+	"github.com/gincoat/gincoat/core/routing"
 	"github.com/joho/godotenv"
 )
 
@@ -68,3 +71,44 @@ func TestIntegratePackages(t *testing.T) {
 		log.Fatal(err)
 	}
 }
+
+func TestRegisterRoutes(t *testing.T) {
+	routes := []routing.Route{
+		{
+			Method: "get",
+			Path:   "/:name",
+			Handlers: []gin.HandlerFunc{
+				func(c *gin.Context) {
+					val, _ := c.Params.Get("name")
+					c.JSON(http.StatusOK, gin.H{
+						"name": val,
+					})
+				},
+			},
+		},
+	}
+	g := gin.New()
+	app := New()
+	app.RegisterRoutes(routes, g)
+	s := httptest.NewServer(g)
+	defer s.Close()
+
+	res, _ := http.Get(fmt.Sprintf("%s/jack", s.URL))
+	body, _ := ioutil.ReadAll(res.Body)
+	type ResultStruct struct {
+		Name string `json:"Name"`
+	}
+	var result ResultStruct
+	json.Unmarshal(body, &result)
+	if result.Name != "jack" {
+		t.Errorf("failed assert execution of registerd route")
+	}
+}
+
+//TODO test next
+//Bootstrap
+//Run
+//FeaturesControl
+//useMiddlewares
+//getHTTPSHost
+//getHTTPHost
