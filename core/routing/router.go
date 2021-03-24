@@ -31,14 +31,69 @@ func New() *Router {
 }
 
 // Resolve resolves an already initiated router
-func Resolve() *Router {
+func (r *Router) Resolve() *Router {
 	return router
 }
 
-// Get is a definition for get requests
+// Get is a definition for get request
 func (r *Router) Get(path string, handlers ...gin.HandlerFunc) *Router {
 	r.routes = append(r.routes, Route{
 		Method:   "get",
+		Path:     path,
+		Handlers: handlers,
+	})
+
+	return r
+}
+
+// Post is a definition for post request
+func (r *Router) Post(path string, handlers ...gin.HandlerFunc) *Router {
+	r.routes = append(r.routes, Route{
+		Method:   "post",
+		Path:     path,
+		Handlers: handlers,
+	})
+
+	return r
+}
+
+// Delete is a definition for delete request
+func (r *Router) Delete(path string, handlers ...gin.HandlerFunc) *Router {
+	r.routes = append(r.routes, Route{
+		Method:   "delete",
+		Path:     path,
+		Handlers: handlers,
+	})
+
+	return r
+}
+
+// Put is a definition for put request
+func (r *Router) Put(path string, handlers ...gin.HandlerFunc) *Router {
+	r.routes = append(r.routes, Route{
+		Method:   "put",
+		Path:     path,
+		Handlers: handlers,
+	})
+
+	return r
+}
+
+// Options is a definition for options request
+func (r *Router) Options(path string, handlers ...gin.HandlerFunc) *Router {
+	r.routes = append(r.routes, Route{
+		Method:   "options",
+		Path:     path,
+		Handlers: handlers,
+	})
+
+	return r
+}
+
+// Head is a definition for head request
+func (r *Router) Head(path string, handlers ...gin.HandlerFunc) *Router {
+	r.routes = append(r.routes, Route{
+		Method:   "head",
 		Path:     path,
 		Handlers: handlers,
 	})
