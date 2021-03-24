@@ -206,6 +206,19 @@ func TestGetHTTPSHost(t *testing.T) {
 
 }
 
-//GetHTTPSHost
-//getHTTPHost
+func TestGetHTTPHost(t *testing.T) {
+	app := New()
+	host := app.GetHTTPHost()
+	if host != "localhost" {
+		t.Errorf("failed getting http host")
+	}
+
+	os.Setenv("APP_HTTP_HOST", "testserver.com")
+	host = app.GetHTTPHost()
+	if host != "testserver.com" {
+		t.Errorf("failed getting http host")
+	}
+
+}
+
 //Run

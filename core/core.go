@@ -122,7 +122,7 @@ func (app *App) Run(portNumber string) {
 		}()
 		redirectEngine := gin.New()
 		redirectEngine.Use(secureFunc)
-		host := fmt.Sprintf("%s:%s", app.getHTTPHost(), portNumber)
+		host := fmt.Sprintf("%s:%s", app.GetHTTPHost(), portNumber)
 		redirectEngine.Run(host)
 	}
 
@@ -130,7 +130,7 @@ func (app *App) Run(portNumber string) {
 	httpGinEngine = app.IntegratePackages(httpGinEngine, pkgintegrator.Resolve().GetIntegrations())
 	router := routing.Resolve()
 	httpGinEngine = app.RegisterRoutes(router.GetRoutes(), httpGinEngine)
-	host := fmt.Sprintf("%s:%s", app.getHTTPHost(), portNumber)
+	host := fmt.Sprintf("%s:%s", app.GetHTTPHost(), portNumber)
 	httpGinEngine.Run(host)
 }
 
@@ -199,7 +199,7 @@ func (app *App) GetHTTPSHost() string {
 	return host
 }
 
-func (app *App) getHTTPHost() string {
+func (app *App) GetHTTPHost() string {
 	host := os.Getenv("APP_HTTP_HOST")
 	//if both not set use local host
 	if host == "" {
