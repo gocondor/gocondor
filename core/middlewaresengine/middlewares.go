@@ -25,7 +25,7 @@ func New() *MiddlewaresEngine {
 }
 
 //ResolveMiddlewaresEngine resolve an already initated middleware engine
-func (m *MiddlewaresEngine) Resolve() *MiddlewaresEngine {
+func Resolve() *MiddlewaresEngine {
 	return mwEngine
 }
 

@@ -17,8 +17,8 @@ func TestNew(t *testing.T) {
 }
 
 func TestResolve(t *testing.T) {
-	r := New()
-	if fmt.Sprintf("%T", r.Resolve()) != "*routing.Router" {
+	r := Resolve()
+	if fmt.Sprintf("%T", r) != "*routing.Router" {
 		t.Error("failed resolve router variable")
 	}
 }

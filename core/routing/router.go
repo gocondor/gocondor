@@ -31,7 +31,7 @@ func New() *Router {
 }
 
 // Resolve resolves an already initiated router
-func (r *Router) Resolve() *Router {
+func Resolve() *Router {
 	return router
 }
 

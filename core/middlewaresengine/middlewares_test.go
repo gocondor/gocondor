@@ -16,8 +16,8 @@ func TestNew(t *testing.T) {
 }
 
 func TestResolve(t *testing.T) {
-	m := New()
-	if fmt.Sprintf("%T", m.Resolve()) != "*middlewaresengine.MiddlewaresEngine" {
+	m := Resolve()
+	if fmt.Sprintf("%T", m) != "*middlewaresengine.MiddlewaresEngine" {
 		t.Errorf("Failed asserting middleware engine var resolve")
 	}
 }
