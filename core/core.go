@@ -80,7 +80,8 @@ func (app *App) Run(portNumber string) {
 		portNumber = "80"
 	}
 
-	logsFile, err := os.OpenFile(logsFilePath, os.O_CREATE|os.O_APPEND|os.O_CREATE, 644)
+	// Log to file
+	logsFile, err := os.OpenFile(logsFilePath, os.O_CREATE|os.O_APPEND|os.O_RDWR, 0644)
 	if err != nil {
 		panic(err)
 	}
@@ -96,12 +97,12 @@ func (app *App) Run(portNumber string) {
 
 	if httpsOn {
 		//serve the https
-		httpsGinEngine = app.IntegratePackages(httpsGinEngine, pkgintegrator.Resolve().GetIntegrations())
-		router := routing.Resolve()
-		httpsGinEngine = app.RegisterRoutes(router.GetRoutes(), httpsGinEngine)
 		certFile := os.Getenv("APP_HTTPS_CERT_FILE_PATH")
 		keyFile := os.Getenv("APP_HTTPS_KEY_FILE_PATH")
-		host := app.getHTTPSHost() + ":443"
+		host := app.GetHTTPSHost() + ":443"
+		httpsGinEngine = app.IntegratePackages(pkgintegrator.Resolve().GetIntegrations(), httpsGinEngine)
+		httpsGinEngine = app.UseMiddlewares(middlewaresengine.Resolve().GetMiddlewares(), httpsGinEngine)
+		httpsGinEngine = app.RegisterRoutes(routing.Resolve().GetRoutes(), httpsGinEngine)
 		go httpsGinEngine.RunTLS(host, certFile, keyFile)
 	}
 
@@ -111,7 +112,7 @@ func (app *App) Run(portNumber string) {
 			return func(c *gin.Context) {
 				secureMiddleware := secure.New(secure.Options{
 					SSLRedirect: true,
-					SSLHost:     app.getHTTPSHost() + ":443",
+					SSLHost:     app.GetHTTPSHost() + ":443",
 				})
 				err := secureMiddleware.Process(c.Writer, c.Request)
 				if err != nil {
@@ -122,15 +123,15 @@ func (app *App) Run(portNumber string) {
 		}()
 		redirectEngine := gin.New()
 		redirectEngine.Use(secureFunc)
-		host := fmt.Sprintf("%s:%s", app.getHTTPHost(), portNumber)
+		host := fmt.Sprintf("%s:%s", app.GetHTTPHost(), portNumber)
 		redirectEngine.Run(host)
 	}
 
 	//serve the http version
-	httpGinEngine = app.IntegratePackages(httpGinEngine, pkgintegrator.Resolve().GetIntegrations())
-	router := routing.Resolve()
-	httpGinEngine = app.RegisterRoutes(router.GetRoutes(), httpGinEngine)
-	host := fmt.Sprintf("%s:%s", app.getHTTPHost(), portNumber)
+	httpGinEngine = app.IntegratePackages(pkgintegrator.Resolve().GetIntegrations(), httpGinEngine)
+	httpGinEngine = app.UseMiddlewares(middlewaresengine.Resolve().GetMiddlewares(), httpGinEngine)
+	httpGinEngine = app.RegisterRoutes(routing.Resolve().GetRoutes(), httpGinEngine)
+	host := fmt.Sprintf("%s:%s", app.GetHTTPHost(), portNumber)
 	httpGinEngine.Run(host)
 }
 
@@ -142,7 +143,7 @@ func (app *App) SetAppMode(mode string) {
 	}
 }
 
-func (app *App) IntegratePackages(engine *gin.Engine, handlerFuncs []gin.HandlerFunc) *gin.Engine {
+func (app *App) IntegratePackages(handlerFuncs []gin.HandlerFunc, engine *gin.Engine) *gin.Engine {
 	for _, pkgIntegration := range handlerFuncs {
 		engine.Use(pkgIntegration)
 	}
@@ -186,7 +187,7 @@ func (app *App) RegisterRoutes(routers []routing.Route, engine *gin.Engine) *gin
 	return engine
 }
 
-func (app *App) getHTTPSHost() string {
+func (app *App) GetHTTPSHost() string {
 	host := os.Getenv("APP_HTTPS_HOST")
 	//if not set get http instead
 	if host == "" {
@@ -199,11 +200,20 @@ func (app *App) getHTTPSHost() string {
 	return host
 }
 
-func (app *App) getHTTPHost() string {
+func (app *App) GetHTTPHost() string {
 	host := os.Getenv("APP_HTTP_HOST")
 	//if both not set use local host
 	if host == "" {
 		host = "localhost"
 	}
 	return host
+}
+
+func (app *App) EnableLogToFile(logsFilePath string) {
+	logsFile, err := os.OpenFile(logsFilePath, os.O_CREATE|os.O_APPEND|os.O_RDWR, 0644)
+	if err != nil {
+		panic(err)
+	}
+	defer logsFile.Close()
+	gin.DefaultWriter = io.MultiWriter(logsFile, os.Stdout)
 }

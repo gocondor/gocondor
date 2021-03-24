@@ -62,7 +62,7 @@ func TestIntegratePackages(t *testing.T) {
 			c.Set("TEST_KEY2", "TEST_VAL2")
 		},
 	}
-	g = app.IntegratePackages(g, hanldrFuncs)
+	g = app.IntegratePackages(hanldrFuncs, g)
 	g.GET("/", func(c *gin.Context) {
 		if c.MustGet("TEST_KEY1") != "TEST_VAL1" || c.MustGet("TEST_KEY2") != "TEST_VAL2" {
 			t.Errorf("failed to integrate packages")
@@ -191,6 +191,32 @@ func TestUseMiddleWares(t *testing.T) {
 	}
 }
 
-//getHTTPSHost
-//getHTTPHost
-//Run
+func TestGetHTTPSHost(t *testing.T) {
+	app := New()
+	host := app.GetHTTPSHost()
+	if host != "localhost" {
+		t.Errorf("failed getting https host")
+	}
+
+	os.Setenv("APP_HTTPS_HOST", "testserver.com")
+	host = app.GetHTTPSHost()
+	if host != "testserver.com" {
+		t.Errorf("failed getting https host")
+	}
+
+}
+
+func TestGetHTTPHost(t *testing.T) {
+	app := New()
+	host := app.GetHTTPHost()
+	if host != "localhost" {
+		t.Errorf("failed getting http host")
+	}
+
+	os.Setenv("APP_HTTP_HOST", "testserver.com")
+	host = app.GetHTTPHost()
+	if host != "testserver.com" {
+		t.Errorf("failed getting http host")
+	}
+
+}
