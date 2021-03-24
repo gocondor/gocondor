@@ -101,7 +101,7 @@ func (app *App) Run(portNumber string) {
 		httpsGinEngine = app.RegisterRoutes(router.GetRoutes(), httpsGinEngine)
 		certFile := os.Getenv("APP_HTTPS_CERT_FILE_PATH")
 		keyFile := os.Getenv("APP_HTTPS_KEY_FILE_PATH")
-		host := app.getHTTPSHost() + ":443"
+		host := app.GetHTTPSHost() + ":443"
 		go httpsGinEngine.RunTLS(host, certFile, keyFile)
 	}
 
@@ -111,7 +111,7 @@ func (app *App) Run(portNumber string) {
 			return func(c *gin.Context) {
 				secureMiddleware := secure.New(secure.Options{
 					SSLRedirect: true,
-					SSLHost:     app.getHTTPSHost() + ":443",
+					SSLHost:     app.GetHTTPSHost() + ":443",
 				})
 				err := secureMiddleware.Process(c.Writer, c.Request)
 				if err != nil {
@@ -186,7 +186,7 @@ func (app *App) RegisterRoutes(routers []routing.Route, engine *gin.Engine) *gin
 	return engine
 }
 
-func (app *App) getHTTPSHost() string {
+func (app *App) GetHTTPSHost() string {
 	host := os.Getenv("APP_HTTPS_HOST")
 	//if not set get http instead
 	if host == "" {

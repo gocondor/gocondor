@@ -191,6 +191,21 @@ func TestUseMiddleWares(t *testing.T) {
 	}
 }
 
-//getHTTPSHost
+func TestGetHTTPSHost(t *testing.T) {
+	app := New()
+	host := app.GetHTTPSHost()
+	if host != "localhost" {
+		t.Errorf("failed getting https host")
+	}
+
+	os.Setenv("APP_HTTPS_HOST", "testserver.com")
+	host = app.GetHTTPSHost()
+	if host != "testserver.com" {
+		t.Errorf("failed getting https host")
+	}
+
+}
+
+//GetHTTPSHost
 //getHTTPHost
 //Run
