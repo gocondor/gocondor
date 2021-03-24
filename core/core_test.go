@@ -62,7 +62,7 @@ func TestIntegratePackages(t *testing.T) {
 			c.Set("TEST_KEY2", "TEST_VAL2")
 		},
 	}
-	g = app.IntegratePackages(g, hanldrFuncs)
+	g = app.IntegratePackages(hanldrFuncs, g)
 	g.GET("/", func(c *gin.Context) {
 		if c.MustGet("TEST_KEY1") != "TEST_VAL1" || c.MustGet("TEST_KEY2") != "TEST_VAL2" {
 			t.Errorf("failed to integrate packages")
@@ -220,5 +220,3 @@ func TestGetHTTPHost(t *testing.T) {
 	}
 
 }
-
-//Run

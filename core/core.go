@@ -80,7 +80,8 @@ func (app *App) Run(portNumber string) {
 		portNumber = "80"
 	}
 
-	logsFile, err := os.OpenFile(logsFilePath, os.O_CREATE|os.O_APPEND|os.O_CREATE, 644)
+	// Log to file
+	logsFile, err := os.OpenFile(logsFilePath, os.O_CREATE|os.O_APPEND|os.O_RDWR, 0644)
 	if err != nil {
 		panic(err)
 	}
@@ -96,12 +97,12 @@ func (app *App) Run(portNumber string) {
 
 	if httpsOn {
 		//serve the https
-		httpsGinEngine = app.IntegratePackages(httpsGinEngine, pkgintegrator.Resolve().GetIntegrations())
-		router := routing.Resolve()
-		httpsGinEngine = app.RegisterRoutes(router.GetRoutes(), httpsGinEngine)
 		certFile := os.Getenv("APP_HTTPS_CERT_FILE_PATH")
 		keyFile := os.Getenv("APP_HTTPS_KEY_FILE_PATH")
 		host := app.GetHTTPSHost() + ":443"
+		httpsGinEngine = app.IntegratePackages(pkgintegrator.Resolve().GetIntegrations(), httpsGinEngine)
+		httpsGinEngine = app.UseMiddlewares(middlewaresengine.Resolve().GetMiddlewares(), httpsGinEngine)
+		httpsGinEngine = app.RegisterRoutes(routing.Resolve().GetRoutes(), httpsGinEngine)
 		go httpsGinEngine.RunTLS(host, certFile, keyFile)
 	}
 
@@ -127,9 +128,9 @@ func (app *App) Run(portNumber string) {
 	}
 
 	//serve the http version
-	httpGinEngine = app.IntegratePackages(httpGinEngine, pkgintegrator.Resolve().GetIntegrations())
-	router := routing.Resolve()
-	httpGinEngine = app.RegisterRoutes(router.GetRoutes(), httpGinEngine)
+	httpGinEngine = app.IntegratePackages(pkgintegrator.Resolve().GetIntegrations(), httpGinEngine)
+	httpGinEngine = app.UseMiddlewares(middlewaresengine.Resolve().GetMiddlewares(), httpGinEngine)
+	httpGinEngine = app.RegisterRoutes(routing.Resolve().GetRoutes(), httpGinEngine)
 	host := fmt.Sprintf("%s:%s", app.GetHTTPHost(), portNumber)
 	httpGinEngine.Run(host)
 }
@@ -142,7 +143,7 @@ func (app *App) SetAppMode(mode string) {
 	}
 }
 
-func (app *App) IntegratePackages(engine *gin.Engine, handlerFuncs []gin.HandlerFunc) *gin.Engine {
+func (app *App) IntegratePackages(handlerFuncs []gin.HandlerFunc, engine *gin.Engine) *gin.Engine {
 	for _, pkgIntegration := range handlerFuncs {
 		engine.Use(pkgIntegration)
 	}
@@ -206,4 +207,13 @@ func (app *App) GetHTTPHost() string {
 		host = "localhost"
 	}
 	return host
+}
+
+func (app *App) EnableLogToFile(logsFilePath string) {
+	logsFile, err := os.OpenFile(logsFilePath, os.O_CREATE|os.O_APPEND|os.O_RDWR, 0644)
+	if err != nil {
+		panic(err)
+	}
+	defer logsFile.Close()
+	gin.DefaultWriter = io.MultiWriter(logsFile, os.Stdout)
 }
