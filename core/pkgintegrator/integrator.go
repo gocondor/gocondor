@@ -12,8 +12,10 @@ type PKGIntegrator struct {
 
 var integrator *PKGIntegrator
 
-func New() {
+func New() *PKGIntegrator {
 	integrator = &PKGIntegrator{}
+
+	return integrator
 }
 
 func Resolve() *PKGIntegrator {
