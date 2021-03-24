@@ -35,7 +35,7 @@ func main() {
 	app.SetAppMode(os.Getenv("APP_MODE"))
 
 	// What features to turn on or off
-	app.FeaturesControl(config.Features)
+	app.SetEnabledFeatures(config.Features)
 
 	// initialize core packages
 	app.Bootstrap()
