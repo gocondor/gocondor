@@ -53,20 +53,24 @@ func (app *App) SetEnv(env map[string]string) {
 
 //Bootstrap initiate app
 func (app *App) Bootstrap() {
-	//initiate package integrator
+	//initiate package integrator variable
 	pkgintegrator.New()
 
-	//initiate middlewares engine
+	//initiate middlewares engine varialbe
 	middlewaresengine.New()
 
-	//initiate routing engine
+	//initiate routing engine varialbe
 	routing.New()
 
-	//initiate db connection
-	database.New()
+	//initiate data base varialb
+	if app.Features.Database == true {
+		database.New()
+	}
 
-	// initiate the cache
-	cache.New()
+	// initiate the cache varialbe
+	if app.Features.Cache == true {
+		cache.New()
+	}
 }
 
 // Run execute the app
@@ -93,7 +97,7 @@ func (app *App) Run(portNumber string) {
 	if httpsOn {
 		//serve the https
 		httpsGinEngine = app.IntegratePackages(httpsGinEngine, pkgintegrator.Resolve().GetIntegrations())
-		router := routing.ResolveRouter()
+		router := routing.Resolve()
 		httpsGinEngine = app.RegisterRoutes(router.GetRoutes(), httpsGinEngine)
 		certFile := os.Getenv("APP_HTTPS_CERT_FILE_PATH")
 		keyFile := os.Getenv("APP_HTTPS_KEY_FILE_PATH")
@@ -124,7 +128,7 @@ func (app *App) Run(portNumber string) {
 
 	//serve the http version
 	httpGinEngine = app.IntegratePackages(httpGinEngine, pkgintegrator.Resolve().GetIntegrations())
-	router := routing.ResolveRouter()
+	router := routing.Resolve()
 	httpGinEngine = app.RegisterRoutes(router.GetRoutes(), httpGinEngine)
 	host := fmt.Sprintf("%s:%s", app.getHTTPHost(), portNumber)
 	httpGinEngine.Run(host)
@@ -147,12 +151,12 @@ func (app *App) IntegratePackages(engine *gin.Engine, handlerFuncs []gin.Handler
 }
 
 //FeaturesControl to control what features to turn on or off
-func (app *App) FeaturesControl(features *Features) {
+func (app *App) SetEnabledFeatures(features *Features) {
 	app.Features = features
 }
 
-func (app *App) useMiddlewares(engine *gin.Engine) *gin.Engine {
-	for _, middleware := range middlewaresengine.Resolve().GetMiddlewares() {
+func (app *App) UseMiddlewares(middlewares []gin.HandlerFunc, engine *gin.Engine) *gin.Engine {
+	for _, middleware := range middlewares {
 		engine.Use(middleware)
 	}
 

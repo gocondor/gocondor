@@ -11,7 +11,12 @@ import (
 	"testing"
 
 	"github.com/gin-gonic/gin"
+	"github.com/gincoat/gincoat/config"
+	"github.com/gincoat/gincoat/core"
 	. "github.com/gincoat/gincoat/core"
+	"github.com/gincoat/gincoat/core/database"
+	"github.com/gincoat/gincoat/core/middlewaresengine"
+	"github.com/gincoat/gincoat/core/pkgintegrator"
 	"github.com/gincoat/gincoat/core/routing"
 	"github.com/joho/godotenv"
 )
@@ -105,10 +110,87 @@ func TestRegisterRoutes(t *testing.T) {
 	}
 }
 
-//TODO test next
-//Bootstrap
-//Run
-//FeaturesControl
-//useMiddlewares
+func TestSetEnabledFeatures(t *testing.T) {
+	app := New()
+	app.SetEnabledFeatures(config.Features)
+
+	if app.Features.Database != false || app.Features.Cache != false || app.Features.GRPC != false {
+		t.Errorf("failed setting features")
+	}
+}
+
+func TestBootstrap(t *testing.T) {
+	var Features *core.Features = &core.Features{
+		Database: true,
+		Cache:    false,
+		GRPC:     false,
+	}
+	os.Setenv("DB_DRIVER", "sqlite") // set database driver to sqlite
+	app := New()
+	env, _ := godotenv.Read("./testingdata/.env")
+	app.SetEnv(env)
+	app.SetEnabledFeatures(Features)
+	app.Bootstrap()
+
+	i := pkgintegrator.Resolve()
+	if i == nil || fmt.Sprintf("%T", i) != "*pkgintegrator.PKGIntegrator" {
+		t.Errorf("failed asserting the initiation of PKGIntegrator")
+	}
+
+	m := middlewaresengine.Resolve()
+	if m == nil || fmt.Sprintf("%T", m) != "*middlewaresengine.MiddlewaresEngine" {
+		t.Errorf("failed asserting the initiation of MiddlewaresEngine")
+	}
+
+	r := routing.Resolve()
+	if r == nil || fmt.Sprintf("%T", r) != "*routing.Router" {
+		t.Errorf("failed asserting the initiation of Router")
+	}
+
+	d := database.Resolve()
+	if d == nil || fmt.Sprintf("%T", d) != "*gorm.DB" {
+		t.Errorf("failed asserting the initiation of Database")
+	}
+}
+
+func TestUseMiddleWares(t *testing.T) {
+	middlewares := []gin.HandlerFunc{
+		func(c *gin.Context) {
+			c.Set("VAR1", "VAL1")
+		},
+		func(c *gin.Context) {
+			c.Set("VAR2", "VAL2")
+		},
+	}
+
+	g := gin.New()
+	app := New()
+	g = app.UseMiddlewares(middlewares, g)
+
+	g.GET("/", func(c *gin.Context) {
+		c.JSON(http.StatusOK, gin.H{
+			"VAR1": c.MustGet("VAR1"),
+			"VAR2": c.MustGet("VAR2"),
+		})
+	})
+	s := httptest.NewServer(g)
+	defer s.Close()
+	res, _ := s.Client().Get(s.URL)
+	body, _ := ioutil.ReadAll(res.Body)
+
+	type ResponseStruct struct {
+		VAR1 string `json:"VAR1"`
+		VAR2 string `json:"VAR2"`
+	}
+
+	var response ResponseStruct
+	json.Unmarshal(body, &response)
+
+	if response.VAR1 != "VAL1" || response.VAR2 != "VAL2" {
+		t.Errorf("failed asserting middlewares registering")
+	}
+}
+
 //getHTTPSHost
 //getHTTPHost
+//Run
