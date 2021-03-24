@@ -11,7 +11,7 @@ import (
 
 //RegisterRoutes to register your routes
 func RegisterRoutes() {
-	router := routing.ResolveRouter()
+	router := routing.Resolve()
 
 	//Define your routes here
 	router.Get("/home", handlers.HomeShow)
