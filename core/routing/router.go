@@ -30,8 +30,8 @@ func New() *Router {
 	return router
 }
 
-// ResolveRouter resolves an already initiated router
-func ResolveRouter() *Router {
+// Resolve resolves an already initiated router
+func Resolve() *Router {
 	return router
 }
 
