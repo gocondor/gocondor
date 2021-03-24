@@ -9,7 +9,6 @@ import (
 	"log"
 	"os"
 
-	"github.com/gincoat/gincoat/core/env"
 	"gorm.io/driver/mysql"
 	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
@@ -21,7 +20,7 @@ var err error
 // New initiates database connection
 func New() *gorm.DB {
 	//initiate database drier
-	switch env.Get("DB_DRIVER") {
+	switch os.Getenv("DB_DRIVER") {
 	case "mysql":
 		db, err := prepareMysql()
 		if err != nil {
@@ -29,7 +28,7 @@ func New() *gorm.DB {
 		}
 		return db
 	case "sqlite":
-		dbName := env.Get("SQLITE_FILE")
+		dbName := os.Getenv("SQLITE_FILE")
 		_, err := os.Stat("../../" + dbName)
 		if err != nil {
 			panic(err)
@@ -51,12 +50,12 @@ func New() *gorm.DB {
 func prepareMysql() (*gorm.DB, error) {
 	dsn := fmt.Sprintf(
 		"%s:%s@tcp(%s:%s)/%s?charset=%s&parseTime=True&loc=Local",
-		env.Get("MYSQL_USERNAME"),
-		env.Get("MYSQL_PASSWORD"),
-		env.Get("MYSQL_HOST"),
-		env.Get("MYSQL_PORT"),
-		env.Get("MYSQL_DB_NAME"),
-		env.Get("MYSQL_CHARSET"),
+		os.Getenv("MYSQL_USERNAME"),
+		os.Getenv("MYSQL_PASSWORD"),
+		os.Getenv("MYSQL_HOST"),
+		os.Getenv("MYSQL_PORT"),
+		os.Getenv("MYSQL_DB_NAME"),
+		os.Getenv("MYSQL_CHARSET"),
 	)
 	db, err = gorm.Open(mysql.Open(dsn), &gorm.Config{})
 	if err != nil {

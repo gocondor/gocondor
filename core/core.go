@@ -9,11 +9,11 @@ import (
 	"io"
 	"os"
 	"strconv"
+	"strings"
 
 	"github.com/gin-gonic/gin"
 	"github.com/gincoat/gincoat/core/cache"
 	"github.com/gincoat/gincoat/core/database"
-	"github.com/gincoat/gincoat/core/env"
 	"github.com/gincoat/gincoat/core/middlewaresengine"
 	"github.com/gincoat/gincoat/core/pkgintegrator"
 	"github.com/gincoat/gincoat/core/routing"
@@ -44,35 +44,32 @@ func New() *App {
 	}
 }
 
+// SetEnv sets environment varialbes
+func (app *App) SetEnv(env map[string]string) {
+	for key, val := range env {
+		os.Setenv(strings.TrimSpace(key), strings.TrimSpace(val))
+	}
+}
+
 //Bootstrap initiate app
 func (app *App) Bootstrap() {
-	// set the app mode
-	setAppMode()
-
-	//load env vars
-	env.Load()
-
-	//initiate package integrator
+	//initiate package integrator variable
 	pkgintegrator.New()
 
-	//initiate middlewares engine
+	//initiate middlewares engine varialbe
 	middlewaresengine.New()
 
-	//initiate routing engine
+	//initiate routing engine varialbe
 	routing.New()
 
+	//initiate data base varialb
 	if app.Features.Database == true {
-		//initiate db connection
 		database.New()
-		//register database driver
-		pkgintegrator.Resolve().Integrate(GORMIntegrator(database.Resolve()))
 	}
 
+	// initiate the cache varialbe
 	if app.Features.Cache == true {
-		// initiate the cache
 		cache.New()
-		//register the cache
-		pkgintegrator.Resolve().Integrate(Cache(cache.Resolve()))
 	}
 }
 
@@ -94,16 +91,16 @@ func (app *App) Run(portNumber string) {
 	httpGinEngine := gin.Default()
 	httpsGinEngine := gin.Default()
 
-	httpsOn, _ := strconv.ParseBool(env.Get("APP_HTTPS_ON"))
-	redirectToHTTPS, _ := strconv.ParseBool(env.Get("APP_REDIRECT_HTTP_TO_HTTPS"))
+	httpsOn, _ := strconv.ParseBool(os.Getenv("APP_HTTPS_ON"))
+	redirectToHTTPS, _ := strconv.ParseBool(os.Getenv("APP_REDIRECT_HTTP_TO_HTTPS"))
 
 	if httpsOn {
 		//serve the https
-		httpsGinEngine = app.integratePackages(httpsGinEngine)
-		router := routing.ResolveRouter()
-		httpsGinEngine = app.registerRoutes(router, httpsGinEngine)
-		certFile := env.Get("APP_HTTPS_CERT_FILE_PATH")
-		keyFile := env.Get("APP_HTTPS_KEY_FILE_PATH")
+		httpsGinEngine = app.IntegratePackages(httpsGinEngine, pkgintegrator.Resolve().GetIntegrations())
+		router := routing.Resolve()
+		httpsGinEngine = app.RegisterRoutes(router.GetRoutes(), httpsGinEngine)
+		certFile := os.Getenv("APP_HTTPS_CERT_FILE_PATH")
+		keyFile := os.Getenv("APP_HTTPS_KEY_FILE_PATH")
 		host := app.getHTTPSHost() + ":443"
 		go httpsGinEngine.RunTLS(host, certFile, keyFile)
 	}
@@ -130,45 +127,23 @@ func (app *App) Run(portNumber string) {
 	}
 
 	//serve the http version
-	httpGinEngine = app.integratePackages(httpGinEngine)
-	router := routing.ResolveRouter()
-	httpGinEngine = app.registerRoutes(router, httpGinEngine)
+	httpGinEngine = app.IntegratePackages(httpGinEngine, pkgintegrator.Resolve().GetIntegrations())
+	router := routing.Resolve()
+	httpGinEngine = app.RegisterRoutes(router.GetRoutes(), httpGinEngine)
 	host := fmt.Sprintf("%s:%s", app.getHTTPHost(), portNumber)
 	httpGinEngine.Run(host)
 }
 
-func (app *App) handleRoute(route routing.Route, ginEngine *gin.Engine) {
-	switch route.Method {
-	case "get":
-		ginEngine.GET(route.Path, route.Handlers...)
-	case "post":
-		ginEngine.POST(route.Path, route.Handlers...)
-	case "delete":
-		ginEngine.DELETE(route.Path, route.Handlers...)
-	case "patch":
-		ginEngine.PATCH(route.Path, route.Handlers...)
-	case "put":
-		ginEngine.PUT(route.Path, route.Handlers...)
-	case "options":
-		ginEngine.OPTIONS(route.Path, route.Handlers...)
-	case "head":
-		ginEngine.HEAD(route.Path, route.Handlers...)
-	}
-}
-
-func setAppMode() {
-	mode := os.Getenv("MODE")
-	if mode == "release" {
-		gin.SetMode(gin.ReleaseMode)
-	} else if mode == "test" {
-		gin.SetMode(gin.TestMode)
+func (app *App) SetAppMode(mode string) {
+	if mode == gin.ReleaseMode || mode == gin.TestMode || mode == gin.DebugMode {
+		gin.SetMode(mode)
 	} else {
-		gin.SetMode(gin.DebugMode)
+		gin.SetMode(gin.TestMode)
 	}
 }
 
-func (app *App) integratePackages(engine *gin.Engine) *gin.Engine {
-	for _, pkgIntegration := range pkgintegrator.Resolve().GetIntegrations() {
+func (app *App) IntegratePackages(engine *gin.Engine, handlerFuncs []gin.HandlerFunc) *gin.Engine {
+	for _, pkgIntegration := range handlerFuncs {
 		engine.Use(pkgIntegration)
 	}
 
@@ -176,31 +151,46 @@ func (app *App) integratePackages(engine *gin.Engine) *gin.Engine {
 }
 
 //FeaturesControl to control what features to turn on or off
-func (app *App) FeaturesControl(features *Features) {
+func (app *App) SetEnabledFeatures(features *Features) {
 	app.Features = features
 }
 
-func (app *App) useMiddlewares(engine *gin.Engine) *gin.Engine {
-	for _, middleware := range middlewaresengine.Resolve().GetMiddlewares() {
+func (app *App) UseMiddlewares(middlewares []gin.HandlerFunc, engine *gin.Engine) *gin.Engine {
+	for _, middleware := range middlewares {
 		engine.Use(middleware)
 	}
 
 	return engine
 }
 
-func (app *App) registerRoutes(router *routing.Router, engine *gin.Engine) *gin.Engine {
-	for _, route := range router.GetRoutes() {
-		app.handleRoute(route, engine)
+func (app *App) RegisterRoutes(routers []routing.Route, engine *gin.Engine) *gin.Engine {
+	for _, route := range routers {
+		switch route.Method {
+		case "get":
+			engine.GET(route.Path, route.Handlers...)
+		case "post":
+			engine.POST(route.Path, route.Handlers...)
+		case "delete":
+			engine.DELETE(route.Path, route.Handlers...)
+		case "patch":
+			engine.PATCH(route.Path, route.Handlers...)
+		case "put":
+			engine.PUT(route.Path, route.Handlers...)
+		case "options":
+			engine.OPTIONS(route.Path, route.Handlers...)
+		case "head":
+			engine.HEAD(route.Path, route.Handlers...)
+		}
 	}
 
 	return engine
 }
 
 func (app *App) getHTTPSHost() string {
-	host := env.Get("APP_HTTPS_HOST")
+	host := os.Getenv("APP_HTTPS_HOST")
 	//if not set get http instead
 	if host == "" {
-		host = env.Get("APP_HTTP_HOST")
+		host = os.Getenv("APP_HTTP_HOST")
 	}
 	//if both not set use local host
 	if host == "" {
@@ -210,7 +200,7 @@ func (app *App) getHTTPSHost() string {
 }
 
 func (app *App) getHTTPHost() string {
-	host := env.Get("APP_HTTP_HOST")
+	host := os.Getenv("APP_HTTP_HOST")
 	//if both not set use local host
 	if host == "" {
 		host = "localhost"
