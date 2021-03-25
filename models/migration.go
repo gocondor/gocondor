@@ -10,5 +10,5 @@ import "github.com/gincoat/gincoat/core/database"
 func MigrateDB() {
 	db := database.Resolve()
 	//add your models to be auto migrated here
-	db.AutoMigrate(&Product{})
+	db.AutoMigrate(&Example{})
 }
