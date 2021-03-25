@@ -9,7 +9,7 @@ import (
 )
 
 // Product is model that reperesents a database table
-type Product struct {
+type Example struct {
 	gorm.Model
 	Code  string
 	Price int
