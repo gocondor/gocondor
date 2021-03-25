@@ -35,10 +35,9 @@ func TestAttach(t *testing.T) {
 func TestGetMiddlewares(t *testing.T) {
 	m := New()
 	middlewares := []gin.HandlerFunc{
-		func(c *gin.Context) {
-		},
-		func(c *gin.Context) {
-		},
+		func(c *gin.Context) {},
+		func(c *gin.Context) {},
+		func(c *gin.Context) {},
 	}
 	for _, val := range middlewares {
 		m.Attach(val)
