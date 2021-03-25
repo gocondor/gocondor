@@ -73,3 +73,29 @@ func TestExtractToken(t *testing.T) {
 		t.Error("failed to extract jwt token.", err)
 	}
 }
+
+func TestValidateToken(t *testing.T) {
+	j := New()
+
+	token, _ := j.CreateToken(nil)
+
+	_, err := j.ValidateToken(token)
+	if err != nil {
+		t.Error("failed assert validate jwt token")
+	}
+
+}
+
+func TestDecodeToken(t *testing.T) {
+	j := New()
+	token, _ := j.CreateToken(map[string]string{"dummykey": "dummyval"})
+
+	payload, err := j.DecodeToken(token)
+	if err != nil {
+		t.Error("failed decoding the token.", err)
+	}
+
+	if payload["dummykey"] != "dummyval" {
+		t.Error("failed decoding the token")
+	}
+}
