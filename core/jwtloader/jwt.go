@@ -25,8 +25,9 @@ var defaultRefreshTokenLifeSpan time.Duration = 24 //24 hours
 var jwtLoader *JwtLoader
 
 // New initiates Jwt struct
-func New() {
+func New() *JwtLoader {
 	jwtLoader = &JwtLoader{}
+	return jwtLoader
 }
 
 //Resolve returns initiated jwt token
@@ -67,7 +68,7 @@ func (j *JwtLoader) CreateToken(payload map[string]string) (string, error) {
 }
 
 // CreateRefreshToken generates new jwt refresh token with the given payload
-func (j *JwtLoader) CreateRefreshToken(payload map[string]interface{}) (string, error) {
+func (j *JwtLoader) CreateRefreshToken(payload map[string]string) (string, error) {
 	claims := jwt.MapClaims{}
 
 	var duration time.Duration
