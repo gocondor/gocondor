@@ -6,19 +6,16 @@
 Gincoat is a golang framework based on Gin with a development experience similar to Laravel, made for developing modern apis and microservices. it has an `MVC` like architecture.
 
 ### Features 
+- Development Server with live-reloading
 - Router
 - Middlewares
 - JWT tokens
-- Multiple database support
 - ORM (GORM)
-- MongoDB integration
 - Redis cache
 - TLS
 - gRPC
-- Package Integrator
-- CLI with generators for files and code snippets
-- Development Server with hot reloading
-- Features Switch
+- Context Package Integrator
+- Features Control
 
 ### Install via `Gincoatinstaller`
 To install the Gincoat installer run the following command:
