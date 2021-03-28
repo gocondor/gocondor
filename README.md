@@ -1,5 +1,8 @@
 # Gincoat
 
+![Build Status](https://github.com/gincoat/gincoat/actions/workflows/build-master.yml/badge.svg)
+![Test Status](https://github.com/gincoat/gincoat/actions/workflows/test-master.yml/badge.svg)
+
 ## [Under Development]
 
 ### What is Gincoat?
