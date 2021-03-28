@@ -17,18 +17,20 @@ Gincoat is a golang framework based on Gin with a development experience similar
 - Context Package Integrator
 - Features Control
 
-### Install via `Gincoatinstaller`
-To install the Gincoat installer run the following command:
+### Create a new project 
+To create a new Gincoat project you need to install the Gincoat installer cli tool first
+
+#### Installing Gincoat cli 
+To install the cli run the following command
 ```bash
-go get github.com/gincoat/gincoatinstaller
+go get github.com/gincoat/installer/gincoat
 ```
 
-## Create a new project:
+#### Create a new project:
 To create a new project run the following command:
 ```bash
-gincoatinstaller new my-project github.com/my-organization/my-project
+gincoat new my-project github.com/my-organization/my-project
 ```
-
 
 ### Architecture
 the architecture is similar to `MVC` architecture, there is a `routes.go` file where you can define all your routes and their `handlers`, a handler crosponds to a controller action in `MVC`
@@ -51,9 +53,9 @@ The request jouerny looks like this:
 │   ├── models/ ---------------> models
 │   ├── ssl/ ------------------> ssl certificates
 │   ├── .env ------------------> environment variables 
-│   ├── .gitignore ----------------> gitignore file
-│   ├── go.mod --------------------> go modules the project depends on
-│   ├── LICENSE -------------------> license
-│   ├── main.go -------------------> ssl certificates
-│   ├── README.md -----------------> readme file
+│   ├── .gitignore ------------> gitignore file
+│   ├── go.mod ----------------> go modules the project depends on
+│   ├── LICENSE ---------------> license
+│   ├── main.go ---------------> ssl certificates
+│   ├── README.md -------------> readme file
 ```
