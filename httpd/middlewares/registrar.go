@@ -5,7 +5,7 @@
 package middlewares
 
 import (
-	"github.com/gincoat/gincoat/core/middlewaresengine"
+	"github.com/gincoat/core/middlewaresengine"
 )
 
 // RegisterMiddlewares middlwares
