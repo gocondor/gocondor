@@ -5,7 +5,7 @@
 package config
 
 import (
-	"github.com/gincoat/gincoat/core"
+	"github.com/gincoat/core"
 )
 
 // Features to control Gincoat core features

@@ -5,7 +5,7 @@
 package httpd
 
 import (
-	"github.com/gincoat/gincoat/core/routing"
+	"github.com/gincoat/core/routing"
 	"github.com/gincoat/gincoat/httpd/handlers"
 )
 
