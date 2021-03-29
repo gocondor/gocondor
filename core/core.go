@@ -208,12 +208,3 @@ func (app *App) GetHTTPHost() string {
 	}
 	return host
 }
-
-func (app *App) EnableLogToFile(logsFilePath string) {
-	logsFile, err := os.OpenFile(logsFilePath, os.O_CREATE|os.O_APPEND|os.O_RDWR, 0644)
-	if err != nil {
-		panic(err)
-	}
-	defer logsFile.Close()
-	gin.DefaultWriter = io.MultiWriter(logsFile, os.Stdout)
-}
