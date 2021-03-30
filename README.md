@@ -10,7 +10,6 @@
 Gincoat is a golang web framework with an `MVC` like architecture, it's based on [Gin framework](https://github.com/gin-gonic/gin), it has a development experience similar to Laravel, made for developing modern APIs and microservices.
 
 ## Features 
-- Live-Reloading for development
 - Router
 - Middlewares
 - JWT tokens
@@ -18,6 +17,7 @@ Gincoat is a golang web framework with an `MVC` like architecture, it's based on
 - Cache (Redis)
 - TLS
 - Context Package Integrator
+- Live-Reloading for development
 - Features Control
 
 ## Create a new project 
@@ -48,17 +48,17 @@ import (
 
 func ExampleShow(c *gin.Context) {
     message := "Hello from example handler!"
-c.JSON(200, gin.H{
-"message": message,
-})
+    c.JSON(200, gin.H{
+        "message": message,
+    })
 }
 ```
 Next lets define the route, to do that open up the file `httpd/routes.go`, then inside the function `RegisterRoutes()` add to this line `router.Get("/", handlers.ExampleShow)` and make sure it looks like below:
 ```go
 func RegisterRoutes() {
-router := routing.Resolve()
-// Define your routes here
-router.Get("/", handlers.ExampleShow)
+    router := routing.Resolve()
+    // Define your routes here
+    router.Get("/", handlers.ExampleShow)
 }
 
 ```
@@ -70,7 +70,7 @@ Finally, open up your browser and navigate to `localhost:8000`
 
 
 ## Architecture
-the architecture is similar to `MVC` architecture, there is a `routes.go` file where you can define all your routes and their `handlers`, the handler is simply a method to handle the received request, you can think of it like a controller action in `MVC`
+the architecture is similar to `MVC` architecture, there is a `routes.go` file where you can define all your routes and their `handlers`, the handler is simply a method that gets executed when the request is received, you can think of it like a controller action in `MVC`
 
 ### The request journey looks like below:
 `request -> routing -> middleware -> handler -> middleware -> json response`
