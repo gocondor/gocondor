@@ -9,11 +9,10 @@ import (
 	"github.com/gincoat/gincoat/httpd/handlers"
 )
 
-//RegisterRoutes to register your routes
+// RegisterRoutes to register your routes
 func RegisterRoutes() {
 	router := routing.Resolve()
 
 	//Define your routes here
-	router.Get("/home", handlers.HomeShow)
-	//router.Get("/update", middlewares.Logger, handlers.HomeUpdate)
+	router.Get("/home", handlers.HomeGet)
 }

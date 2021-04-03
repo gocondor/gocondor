@@ -11,6 +11,7 @@ import (
 	"github.com/gincoat/core"
 	"github.com/gincoat/core/cache"
 	"github.com/gincoat/core/database"
+	"github.com/gincoat/core/jwtloader"
 	"github.com/gincoat/core/pkgintegrator"
 	"github.com/gincoat/gincoat/config"
 	"github.com/gincoat/gincoat/httpd"
@@ -39,6 +40,9 @@ func main() {
 
 	// initialize core packages
 	app.Bootstrap()
+
+	// register the jwt
+	pkgintegrator.Resolve().Integrate(core.RegisterJwt(jwtloader.Resolve()))
 
 	//register database driver
 	if app.Features.Database == true {

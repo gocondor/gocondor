@@ -8,9 +8,9 @@ import (
 	"github.com/gincoat/core"
 )
 
-// Features to control Gincoat core features
+// Features decide what features of the framework to use
 var Features *core.Features = &core.Features{
-	Database: false, // Database is flag enable or disable the database
-	Cache:    false, // Cache is a flag to enable or disable the cache
-	GRPC:     false, // GRPC is a flag to enable or disable gRPC
+	Database: false,
+	Cache:    false,
+	GRPC:     false,
 }
