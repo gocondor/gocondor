@@ -8,9 +8,11 @@ import (
 	"gorm.io/gorm"
 )
 
-// Product is model that reperesents a database table
-type Example struct {
+// User is an example model
+type User struct {
 	gorm.Model
-	Code  string
-	Price int
+	name     string
+	email    string
+	password string
+	age      int
 }

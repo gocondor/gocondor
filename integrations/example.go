@@ -12,7 +12,7 @@ import (
 var PKGIntegratorExample gin.HandlerFunc = func(c *gin.Context) {
 	//initiate your package variable here
 
-	//set the package varialbe in gin context using c.Set(key, pkg variable)
+	//set the package varialbe in gin context using c.Set(key, pkg-variable)
 	c.Set("key", "package-var")
 
 	//continute execution

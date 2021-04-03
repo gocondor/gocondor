@@ -9,16 +9,9 @@ import (
 )
 
 // HomeShow to show home page
-func HomeShow(c *gin.Context) {
+func HomeGet(c *gin.Context) {
 
 	c.JSON(200, gin.H{
-		"message": "hello from home show!",
-	})
-}
-
-// HomeUpdate to update home page
-func HomeUpdate(c *gin.Context) {
-	c.JSON(200, gin.H{
-		"message": "hello from home update",
+		"message": "hello from home!",
 	})
 }

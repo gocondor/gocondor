@@ -6,7 +6,7 @@ package integrations
 
 import "github.com/gincoat/core/pkgintegrator"
 
-// RegisterPKGIntegrations registers the integrations to gin.Context
+// RegisterPKGIntegrations registers the integrations
 func RegisterPKGIntegrations() {
 	pkgi := pkgintegrator.Resolve()
 

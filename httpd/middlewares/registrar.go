@@ -8,10 +8,10 @@ import (
 	"github.com/gincoat/core/middlewaresengine"
 )
 
-// RegisterMiddlewares middlwares
+// RegisterMiddlewares helps you attach middlwares globally
 func RegisterMiddlewares() {
 	mwEngine := middlewaresengine.Resolve()
 
-	//Register your middlewares here
-	mwEngine.Attach(MiddlewareExample) // Attach the middleware `MiddlewareExample` globally
+	// Register your middlewares here
+	mwEngine.Attach(MiddlewareExample)
 }
