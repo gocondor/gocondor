@@ -1,6 +1,7 @@
 module github.com/gincoat/gincoat
 
 replace (
+	github.com/gincoat/core => ./../core
 	github.com/gincoat/gincoat/config => ./config
 	github.com/gincoat/gincoat/httpd => ./httpd
 	github.com/gincoat/gincoat/httpd/middlewares => ./httpd/middlewares
