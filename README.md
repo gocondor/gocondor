@@ -7,7 +7,8 @@
 
 ## What is Gincoat?
 
-Gincoat is a golang web framework with an `MVC` like architecture, it's based on [Gin framework](https://github.com/gin-gonic/gin), it has a development experience similar to Laravel, made for developing modern APIs and microservices.
+Gincoat is a golang web framework with an `MVC` like architecture, it's based on [Gin framework](https://github.com/gin-gonic/gin), it provides you with an easy-to-use directory structure with a development experience similar to Laravel, made for developing modern APIs and microservices.
+Full docmentation is available at [Gincoat Docs](https://gincoat.github.io/docs/).
 
 ## Features 
 - Router
@@ -29,7 +30,7 @@ To install the `Gincoat cli` run the following command
 go get github.com/gincoat/installer/gincoat
 ```
 
-#### Create a new project:
+#### Create a project using Gincoat cli:
 To create a new project run the following command:
 ```bash
 gincoat new my-project github.com/my-organization/my-project
@@ -38,7 +39,7 @@ gincoat new my-project github.com/my-organization/my-project
 ## Getting started
 First create a project by following the steps above.
 Now Let's create a route to handle our first request
-let's start by defining the handler function for the request, to do that first create a file with the name `example.go` in `httpd/handlers` folder and then add to it the following code:
+let's start by defining the handler function for the request, create a file with the name `example.go` in `httpd/handlers` folder with the following content:
 ```go
 package handlers
 
@@ -62,7 +63,7 @@ func RegisterRoutes() {
 }
 
 ```
-next start the app by running the following code from inside the project:
+Next start the app by running the following code from inside the project:
 ```bash
 gincoat run:dev
 ```
@@ -70,7 +71,7 @@ Finally, open up your browser and navigate to `localhost:8000`
 
 
 ## Architecture
-the architecture is similar to `MVC` architecture, there is a `routes.go` file where you can define all your routes and their `handlers`, the handler is simply a method that gets executed when the request is received, you can think of it like a controller action in `MVC`
+the architecture is similar to `MVC` architecture, there is a `routes.go` file where you can define all your routes and their `handlers`, the handler is simply a method that gets executed when the request is received, you can think of it like a controllers action in `MVC`
 
 ### The request journey looks like below:
 `request -> routing -> middleware -> handler -> middleware -> json response`
