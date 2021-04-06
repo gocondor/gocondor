@@ -1,4 +1,4 @@
-# Gincoat
+![gincoat](https://github.com/gincoat/gincoat.github.io/raw/master/img/logo.png) # Gincoat
 
 ![Build Status](https://github.com/gincoat/gincoat/actions/workflows/build-master.yml/badge.svg)
 ![Test Status](https://github.com/gincoat/gincoat/actions/workflows/test-master.yml/badge.svg)
