@@ -1,3 +1,5 @@
+![gincoat logo](https://github.com/gincoat/gincoat.github.io/raw/source/static/img/logo240x240.png) 
+
 # Gincoat
 
 ![Build Status](https://github.com/gincoat/gincoat/actions/workflows/build-master.yml/badge.svg)
