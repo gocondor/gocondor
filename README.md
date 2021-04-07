@@ -1,3 +1,4 @@
+![gocondor logo](https://github.com/gocondor/gocondor.github.io/raw/master/img/logo.png)
 # GoCondor
 
 ![Build Status](https://github.com/gocondor/gocondor/actions/workflows/build-master.yml/badge.svg)
