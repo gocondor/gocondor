@@ -4,7 +4,7 @@
 
 package models
 
-import "github.com/gincoat/core/database"
+import "github.com/gocondor/core/database"
 
 //MigrateDB the database
 func MigrateDB() {

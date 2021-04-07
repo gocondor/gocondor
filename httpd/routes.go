@@ -5,8 +5,8 @@
 package httpd
 
 import (
-	"github.com/gincoat/core/routing"
-	"github.com/gincoat/gincoat/httpd/handlers"
+	"github.com/gocondor/condor/httpd/handlers"
+	"github.com/gocondor/core/routing"
 )
 
 // RegisterRoutes to register your routes

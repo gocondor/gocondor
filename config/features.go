@@ -5,7 +5,7 @@
 package config
 
 import (
-	"github.com/gincoat/core"
+	"github.com/gocondor/core"
 )
 
 // Features decide what features of the framework to use

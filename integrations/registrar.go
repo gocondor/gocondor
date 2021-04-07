@@ -4,7 +4,7 @@
 
 package integrations
 
-import "github.com/gincoat/core/pkgintegrator"
+import "github.com/gocondor/core/pkgintegrator"
 
 // RegisterPKGIntegrations registers the integrations
 func RegisterPKGIntegrations() {
