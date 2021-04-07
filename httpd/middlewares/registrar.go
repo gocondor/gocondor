@@ -5,7 +5,7 @@
 package middlewares
 
 import (
-	"github.com/gincoat/core/middlewaresengine"
+	"github.com/gocondor/core/middlewaresengine"
 )
 
 // RegisterMiddlewares helps you attach middlwares globally

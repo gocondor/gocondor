@@ -1,16 +1,14 @@
-![gincoat logo](https://github.com/gincoat/gincoat.github.io/raw/source/static/img/logo240x240.png) 
+# Condor
 
-# Gincoat
-
-![Build Status](https://github.com/gincoat/gincoat/actions/workflows/build-master.yml/badge.svg)
-![Test Status](https://github.com/gincoat/gincoat/actions/workflows/test-master.yml/badge.svg)
+![Build Status](https://github.com/gocondor/condor/actions/workflows/build-master.yml/badge.svg)
+![Test Status](https://github.com/gocondor/condor/actions/workflows/test-master.yml/badge.svg)
 
 ## [Under Development]
 
-## What is Gincoat?
+## What is Condor?
 
-Gincoat is a golang web framework with an `MVC` like architecture, it's based on [Gin framework](https://github.com/gin-gonic/gin), it provides you with an easy-to-use directory structure with a development experience similar to Laravel, made for developing modern APIs and microservices.
-Full docmentation is available at [Gincoat Docs](https://gincoat.github.io/docs/).
+Condor is a golang web framework with an `MVC` like architecture, it's based on [Gin framework](https://github.com/gin-gonic/gin), it provides you with an easy-to-use directory structure with a development experience similar to Laravel, made for developing modern APIs and microservices.
+Full docmentation is available at [Condor Docs](https://condor.github.io/docs/).
 
 ## Features 
 - Router
@@ -24,18 +22,18 @@ Full docmentation is available at [Gincoat Docs](https://gincoat.github.io/docs/
 - Features Control
 
 ## Create a new project 
-To create a new Gincoat project you need to install the `Gincoat cli` first
+To create a new Condor project you need to install the `Condor cli` first
 
-#### Install Gincoat cli 
-To install the `Gincoat cli` run the following command
+#### Install Condor cli 
+To install the `Condor cli` run the following command
 ```bash
-go get github.com/gincoat/installer/gincoat
+go get github.com/gocondor/installer/condor
 ```
 
-#### Create a project using Gincoat cli:
+#### Create a project using Condor cli:
 To create a new project run the following command:
 ```bash
-gincoat new my-project github.com/my-organization/my-project
+condor new my-project github.com/my-organization/my-project
 ```
 
 ## Getting started
@@ -67,7 +65,7 @@ func RegisterRoutes() {
 ```
 Next start the app by running the following code from inside the project:
 ```bash
-gincoat run:dev
+condor run:dev
 ```
 Finally, open up your browser and navigate to `localhost:8000`
 
@@ -80,7 +78,7 @@ the architecture is similar to `MVC` architecture, there is a `routes.go` file w
 
 ## Folder structure 
 ```bash
-├── gincoat
+├── condor
 │   ├── config/ ---------------> control what features to turn on
 │   ├── httpd/-----------------> http related code
 │   │   ├── handlers/ --------------> contains your http requests handlers
