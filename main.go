@@ -8,16 +8,16 @@ import (
 	"log"
 	"os"
 
-	"github.com/gocondor/condor/config"
-	"github.com/gocondor/condor/httpd"
-	"github.com/gocondor/condor/httpd/middlewares"
-	"github.com/gocondor/condor/integrations"
-	"github.com/gocondor/condor/models"
 	"github.com/gocondor/core"
 	"github.com/gocondor/core/cache"
 	"github.com/gocondor/core/database"
 	"github.com/gocondor/core/jwtloader"
 	"github.com/gocondor/core/pkgintegrator"
+	"github.com/gocondor/gocondor/config"
+	"github.com/gocondor/gocondor/httpd"
+	"github.com/gocondor/gocondor/httpd/middlewares"
+	"github.com/gocondor/gocondor/integrations"
+	"github.com/gocondor/gocondor/models"
 	"github.com/joho/godotenv"
 )
 
