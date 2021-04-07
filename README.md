@@ -33,7 +33,7 @@ go get github.com/gocondor/installer/gocondor
 #### Create a project using GoCondor cli:
 To create a new project run the following command:
 ```bash
-Gocondor new my-project github.com/my-organization/my-project
+gocondor new my-project github.com/my-organization/my-project
 ```
 
 ## Getting started
