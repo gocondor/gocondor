@@ -1,14 +1,14 @@
-# Condor
+# GoCondor
 
-![Build Status](https://github.com/gocondor/condor/actions/workflows/build-master.yml/badge.svg)
-![Test Status](https://github.com/gocondor/condor/actions/workflows/test-master.yml/badge.svg)
+![Build Status](https://github.com/gocondor/gocondor/actions/workflows/build-master.yml/badge.svg)
+![Test Status](https://github.com/gocondor/gocondor/actions/workflows/test-master.yml/badge.svg)
 
 ## [Under Development]
 
-## What is Condor?
+## What is GoCondor?
 
-Condor is a golang web framework with an `MVC` like architecture, it's based on [Gin framework](https://github.com/gin-gonic/gin), it provides you with an easy-to-use directory structure with a development experience similar to Laravel, made for developing modern APIs and microservices.
-Full docmentation is available at [Condor Docs](https://condor.github.io/docs/).
+GoCondor is a golang web framework with an `MVC` like architecture, it's based on [Gin framework](https://github.com/gin-gonic/gin), it provides you with an easy-to-use directory structure with a development experience similar to Laravel, made for developing modern APIs and microservices.
+Full docmentation is available at [GoCondor Docs](https://gocondor.github.io/docs/).
 
 ## Features 
 - Router
@@ -22,18 +22,18 @@ Full docmentation is available at [Condor Docs](https://condor.github.io/docs/).
 - Features Control
 
 ## Create a new project 
-To create a new Condor project you need to install the `Condor cli` first
+To create a new GoCondor project you need to install the `GoCondor cli` first
 
 #### Install Condor cli 
-To install the `Condor cli` run the following command
+To install the `GoCondor cli` run the following command
 ```bash
-go get github.com/gocondor/installer/condor
+go get github.com/gocondor/installer/gocondor
 ```
 
-#### Create a project using Condor cli:
+#### Create a project using GoCondor cli:
 To create a new project run the following command:
 ```bash
-condor new my-project github.com/my-organization/my-project
+gocondor new my-project github.com/my-organization/my-project
 ```
 
 ## Getting started
@@ -65,7 +65,7 @@ func RegisterRoutes() {
 ```
 Next start the app by running the following code from inside the project:
 ```bash
-condor run:dev
+gocondor run:dev
 ```
 Finally, open up your browser and navigate to `localhost:8000`
 
@@ -78,7 +78,7 @@ the architecture is similar to `MVC` architecture, there is a `routes.go` file w
 
 ## Folder structure 
 ```bash
-├── condor
+├── gocondor
 │   ├── config/ ---------------> control what features to turn on
 │   ├── httpd/-----------------> http related code
 │   │   ├── handlers/ --------------> contains your http requests handlers

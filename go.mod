@@ -1,11 +1,11 @@
-module github.com/gocondor/condor
+module github.com/gocondor/gocondor
 
 replace (
-	github.com/gocondor/condor/config => ./config
-	github.com/gocondor/condor/httpd => ./httpd
-	github.com/gocondor/condor/httpd/middlewares => ./httpd/middlewares
-	github.com/gocondor/condor/integrations => ./integrations
-	github.com/gocondor/condor/models => ./models
+	github.com/gocondor/gocondor/config => ./config
+	github.com/gocondor/gocondor/httpd => ./httpd
+	github.com/gocondor/gocondor/httpd/middlewares => ./httpd/middlewares
+	github.com/gocondor/gocondor/integrations => ./integrations
+	github.com/gocondor/gocondor/models => ./models
 )
 
 go 1.16

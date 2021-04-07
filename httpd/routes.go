@@ -5,8 +5,8 @@
 package httpd
 
 import (
-	"github.com/gocondor/condor/httpd/handlers"
 	"github.com/gocondor/core/routing"
+	"github.com/gocondor/gocondor/httpd/handlers"
 )
 
 // RegisterRoutes to register your routes
