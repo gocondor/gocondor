@@ -1,10 +1,9 @@
 module github.com/gocondor/gocondor
 
 replace (
-	github.com/gocondor/core => C:/Users/harran/go/src/github.com/gocondor/core
 	github.com/gocondor/gocondor/config => ./config
-	github.com/gocondor/gocondor/httpd => ./httpd
-	github.com/gocondor/gocondor/httpd/middlewares => ./httpd/middlewares
+	github.com/gocondor/gocondor/http => ./http
+	github.com/gocondor/gocondor/http/middlewares => ./http/middlewares
 	github.com/gocondor/gocondor/integrations => ./integrations
 	github.com/gocondor/gocondor/models => ./models
 )
