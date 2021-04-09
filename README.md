@@ -40,7 +40,7 @@ gocondor new my-project github.com/my-organization/my-project
 ## Getting started
 First create a project by following the steps above.
 Now Let's create a route to handle our first request
-let's start by defining the handler function for the request, create a file with the name `example.go` in `httpd/handlers` folder with the following content:
+let's start by defining the handler function for the request, create a file with the name `example.go` in `http/handlers` folder with the following content:
 ```go
 package handlers
 
@@ -55,7 +55,7 @@ func ExampleShow(c *gin.Context) {
     })
 }
 ```
-Next lets define the route, to do that open up the file `httpd/routes.go`, then inside the function `RegisterRoutes()` add to this line `router.Get("/", handlers.ExampleShow)` and make sure it looks like below:
+Next lets define the route, to do that open up the file `http/routes.go`, then inside the function `RegisterRoutes()` add to this line `router.Get("/", handlers.ExampleShow)` and make sure it looks like below:
 ```go
 func RegisterRoutes() {
     router := routing.Resolve()
@@ -81,7 +81,7 @@ the architecture is similar to `MVC` architecture, there is a `routes.go` file w
 ```bash
 ├── gocondor
 │   ├── config/ ---------------> control what features to turn on
-│   ├── httpd/-----------------> http related code
+│   ├── http/------------------> http related code
 │   │   ├── handlers/ --------------> contains your http requests handlers
 │   │   ├── middlewares/ -----------> middlewares are defined here
 │   ├── routes.go -------------> your routes are defined here
@@ -124,8 +124,8 @@ replace (
  github.com/gocondor/core => C:/Users/myname/go/src/github.com/gocondor/core
 
  github.com/gocondor/gocondor/config => ./config
- github.com/gocondor/gocondor/httpd => ./httpd
- github.com/gocondor/gocondor/httpd/middlewares => ./httpd/middlewares
+ github.com/gocondor/gocondor/http => ./http
+ github.com/gocondor/gocondor/http/middlewares => ./http/middlewares
  github.com/gocondor/gocondor/integrations => ./integrations
  github.com/gocondor/gocondor/models => ./models
 )
