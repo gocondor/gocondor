@@ -14,8 +14,8 @@ import (
 	"github.com/gocondor/core/jwtloader"
 	"github.com/gocondor/core/pkgintegrator"
 	"github.com/gocondor/gocondor/config"
-	"github.com/gocondor/gocondor/httpd"
-	"github.com/gocondor/gocondor/httpd/middlewares"
+	"github.com/gocondor/gocondor/http"
+	"github.com/gocondor/gocondor/http/middlewares"
 	"github.com/gocondor/gocondor/integrations"
 	"github.com/gocondor/gocondor/models"
 	"github.com/joho/godotenv"
@@ -61,7 +61,7 @@ func main() {
 	middlewares.RegisterMiddlewares()
 
 	// Register routes
-	httpd.RegisterRoutes()
+	http.RegisterRoutes()
 
 	//auto migrate tables
 	if config.Features.Database == true {
