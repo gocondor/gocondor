@@ -2,11 +2,11 @@
 // Use of this source code is governed by MIT-style
 // license that can be found in the LICENSE file.
 
-package httpd
+package http
 
 import (
 	"github.com/gocondor/core/routing"
-	"github.com/gocondor/gocondor/httpd/handlers"
+	"github.com/gocondor/gocondor/http/handlers"
 )
 
 // RegisterRoutes to register your routes
