@@ -5,13 +5,15 @@
 package handlers
 
 import (
+	"net/http"
+
 	"github.com/gin-gonic/gin"
 )
 
 // HomeShow to show home page
 func HomeGet(c *gin.Context) {
 
-	c.JSON(200, gin.H{
+	c.JSON(http.StatusOK, gin.H{
 		"message": "hello from home!",
 	})
 }
