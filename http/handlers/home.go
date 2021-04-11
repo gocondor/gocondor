@@ -11,9 +11,9 @@ import (
 )
 
 // HomeShow to show home page
-func HomeGet(c *gin.Context) {
+func HomeShow(c *gin.Context) {
 
 	c.JSON(http.StatusOK, gin.H{
-		"message": "hello from home!",
+		"message": "Welcome to GoCondor!",
 	})
 }
