@@ -93,7 +93,7 @@ the architecture is similar to `MVC` architecture, there is a `routes.go` file w
 │   ├── .gitignore ------------> gitignore file
 │   ├── go.mod ----------------> go modules the project depends on
 │   ├── LICENSE ---------------> license
-│   ├── main.go ---------------> ssl certificates
+│   ├── main.go ---------------> main file
 │   ├── README.md -------------> readme file
 ```
 
