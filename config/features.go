@@ -8,7 +8,7 @@ import (
 	"github.com/gocondor/core"
 )
 
-// Features decide what features of the framework to use
+// Features helps you decide what features of the framework to use
 var Features *core.Features = &core.Features{
 	Database: false,
 	Cache:    false,
