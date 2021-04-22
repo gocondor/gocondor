@@ -5,13 +5,13 @@
 package middlewares
 
 import (
-	"github.com/gocondor/core/middlewaresengine"
+	"github.com/gocondor/core/middlewares"
 )
 
 // RegisterMiddlewares helps you attach middlwares globally
 func RegisterMiddlewares() {
-	mwEngine := middlewaresengine.Resolve()
+	mwUtil := middlewares.Resolve()
 
 	// Register your middlewares here
-	mwEngine.Attach(MiddlewareExample)
+	mwUtil.Attach(MiddlewareExample)
 }

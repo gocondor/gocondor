@@ -9,14 +9,10 @@ import (
 	"os"
 
 	"github.com/gocondor/core"
-	"github.com/gocondor/core/cache"
-	"github.com/gocondor/core/database"
-	"github.com/gocondor/core/pkgintegrator"
 	"github.com/gocondor/gocondor/config"
 	"github.com/gocondor/gocondor/http"
 	"github.com/gocondor/gocondor/http/handlers"
 	"github.com/gocondor/gocondor/http/middlewares"
-	"github.com/gocondor/gocondor/integrations"
 	"github.com/gocondor/gocondor/models"
 	"github.com/joho/godotenv"
 )
@@ -40,19 +36,6 @@ func main() {
 
 	// initialize core packages
 	app.Bootstrap()
-
-	//register database driver
-	if app.Features.Database == true {
-		pkgintegrator.Resolve().Integrate(core.GORMIntegrator(database.Resolve()))
-	}
-
-	//register the cache
-	if app.Features.Cache == true {
-		pkgintegrator.Resolve().Integrate(core.Cache(cache.Resolve()))
-	}
-
-	// Register packages integrations
-	integrations.RegisterPKGIntegrations()
 
 	// Register global middlewares
 	middlewares.RegisterMiddlewares()
