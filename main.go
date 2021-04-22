@@ -11,10 +11,10 @@ import (
 	"github.com/gocondor/core"
 	"github.com/gocondor/core/cache"
 	"github.com/gocondor/core/database"
-	"github.com/gocondor/core/jwtloader"
 	"github.com/gocondor/core/pkgintegrator"
 	"github.com/gocondor/gocondor/config"
 	"github.com/gocondor/gocondor/http"
+	"github.com/gocondor/gocondor/http/handlers"
 	"github.com/gocondor/gocondor/http/middlewares"
 	"github.com/gocondor/gocondor/integrations"
 	"github.com/gocondor/gocondor/models"
@@ -41,9 +41,6 @@ func main() {
 	// initialize core packages
 	app.Bootstrap()
 
-	// register the jwt
-	pkgintegrator.Resolve().Integrate(core.RegisterJwt(jwtloader.Resolve()))
-
 	//register database driver
 	if app.Features.Database == true {
 		pkgintegrator.Resolve().Integrate(core.GORMIntegrator(database.Resolve()))
@@ -59,6 +56,9 @@ func main() {
 
 	// Register global middlewares
 	middlewares.RegisterMiddlewares()
+
+	// initiate handlers dependancies
+	handlers.InitiateHandlersDependencies()
 
 	// Register routes
 	http.RegisterRoutes()
