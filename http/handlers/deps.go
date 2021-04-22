@@ -8,9 +8,12 @@ import (
 )
 
 var (
-	DB    *gorm.DB           // DB database variable (gorm)
-	Cache *cache.CacheEngine // Cache variable
-	JWT   *jwt.JWTUtil       // JWT represents managment variable
+	// DB for database manipulation
+	DB *gorm.DB
+	// Cache for cache manipulation
+	Cache *cache.CacheEngine
+	// JWT used for jwt tokens creation and validation
+	JWT *jwt.JWTUtil
 )
 
 // InitiateHandlersDependencies to initiate the any dependency of the handlers
