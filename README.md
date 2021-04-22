@@ -4,6 +4,7 @@
 ![Build Status](https://github.com/gocondor/gocondor/actions/workflows/build-master.yml/badge.svg)
 ![Test Status](https://github.com/gocondor/gocondor/actions/workflows/test-master.yml/badge.svg)
 [![GoDoc](https://godoc.org/github.com/gocondor/gocondor?status.svg)](https://godoc.org/github.com/gocondor/gocondor)
+[![Go Report Card](https://goreportcard.com/badge/github.com/gocondor/gocondor)](https://goreportcard.com/report/github.com/gocondor/gocondor)
 
 ## [Under Development]
 
