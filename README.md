@@ -86,8 +86,7 @@ the architecture is similar to `MVC` architecture, there is a `routes.go` file w
 │   ├── http/------------------> http related code
 │   │   ├── handlers/ --------------> contains your http requests handlers
 │   │   ├── middlewares/ -----------> middlewares are defined here
-│   ├── routes.go -------------> your routes are defined here
-│   ├── integrations/ ---------> contains the integrations of third party packages into gin context
+│   ├── routes.go -------------> routes are defined here
 │   ├── logs/ -----------------> log files
 │   ├── models/ ---------------> database models
 │   ├── ssl/ ------------------> ssl certificates
@@ -128,7 +127,7 @@ replace (
  github.com/gocondor/gocondor/config => ./config
  github.com/gocondor/gocondor/http => ./http
  github.com/gocondor/gocondor/http/middlewares => ./http/middlewares
- github.com/gocondor/gocondor/integrations => ./integrations
+ github.com/gocondor/gocondor/handlers => ./http/handlers
  github.com/gocondor/gocondor/models => ./models
 )
 ```
