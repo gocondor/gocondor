@@ -4,6 +4,7 @@ replace (
 	github.com/gocondor/gocondor/config => ./config
 	github.com/gocondor/gocondor/http => ./http
 	github.com/gocondor/gocondor/http/middlewares => ./http/middlewares
+	github.com/gocondor/gocondor/http/handlers => ./http/handlers
 	github.com/gocondor/gocondor/models => ./models
 )
 
