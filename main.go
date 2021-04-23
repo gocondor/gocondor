@@ -40,8 +40,11 @@ func main() {
 	// Register global middlewares
 	middlewares.RegisterMiddlewares()
 
-	// initiate handlers dependancies
+	//InitiateHandlersDependencies initiate handlers dependancies
 	handlers.InitiateHandlersDependencies()
+
+	// InitiateMiddlewaresDependencies initiate handlers dependancies
+	middlewares.InitiateMiddlewaresDependencies()
 
 	// Register routes
 	http.RegisterRoutes()
