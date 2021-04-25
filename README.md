@@ -10,7 +10,7 @@
 
 ## What is GoCondor?
 
-GoCondor is a golang web framework with an `MVC` like architecture, it's based on [Gin framework](https://github.com/gin-gonic/gin), it provides you with an easy-to-use directory structure with a development experience similar to Laravel, made for developing modern APIs and microservices.
+GoCondor is a golang web framework with an `MVC` like architecture, it's based on [Gin framework](https://github.com/gin-gonic/gin), it features a simple directory structure with a development experience similar to Laravel, made for developing modern APIs and microservices.
 Full documentation is available at [GoCondor Docs](https://gocondor.github.io/docs/).
 
 ## Features 
@@ -70,13 +70,7 @@ Next start the app by running the following code from inside the project:
 gocondor run:dev
 ```
 Finally, open up your browser and navigate to `localhost:8000`
-
-
-## Architecture
-the architecture is similar to `MVC` architecture, there is a `routes.go` file where you can define all your routes and their `handlers`, the handler is simply a method that gets executed when the request is received, you can think of it like a controllers action in `MVC`
-
-### The request journey looks like below:
-`request -> routing -> middleware -> handler -> middleware -> json response`
+for more information check [GoCondor Docs](https://gocondor.github.io/docs/).
 
 ## Folder structure 
 ```bash
@@ -96,6 +90,12 @@ the architecture is similar to `MVC` architecture, there is a `routes.go` file w
 │   ├── main.go ---------------> main file
 │   ├── README.md -------------> readme file
 ```
+
+## Architecture
+the architecture is similar to `MVC` architecture, there is a `routes.go` file where you can define all your routes and their `handlers`, the handler is simply a method that gets executed when the request is received, you can think of it like a controllers action in `MVC`
+
+### The request journey looks like below:
+`request -> routing -> middleware -> handler -> middleware -> json response`
 
 ## Contribute
 The framework consists of two main parts, each lives in a separate repository, the first part is the `core` which contains the framework core packages. the second part is `gocondor` which has the project folder structure and responsible of gluing everything together.
