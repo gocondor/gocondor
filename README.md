@@ -11,7 +11,7 @@
 
 ## What is GoCondor?
 
-GoCondor is a golang web framework with an `MVC` like architecture, it's based on [Gin framework](https://github.com/gin-gonic/gin), it features a development experience similar to Laravel, made for developing APIs and microservices.
+GoCondor is a golang web framework with an `MVC` like architecture, it's based on [Gin framework](https://github.com/gin-gonic/gin), it features a development experience similar to Laravel made for developing APIs and microservices.
 Full documentation is available at [GoCondor Docs](https://gocondor.github.io/docs/).
 
 ## Features
@@ -69,6 +69,7 @@ Next start the app by running the following code from inside the pro
 gocondor run:dev
 ```
 Finally, open up your browser and navigate to `localhost:8000`
+documentation available at [GoCondor Docs](https://gocondor.github.io/docs/).
 
 ## Folder structure 
 ```bash
