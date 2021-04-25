@@ -1,4 +1,5 @@
 ![gocondor logo](https://github.com/gocondor/gocondor.github.io/raw/master/img/logo.png)
+
 # GoCondor
 
 ![Build Status](https://github.com/gocondor/gocondor/actions/workflows/build-master.yml/badge.svg)
@@ -13,7 +14,7 @@
 GoCondor is a golang web framework with an `MVC` like architecture, it's based on [Gin framework](https://github.com/gin-gonic/gin), it features a development experience similar to Laravel, made for developing APIs and microservices.
 Full documentation is available at [GoCondor Docs](https://gocondor.github.io/docs/).
 
-## Features 
+## Features
 - Router
 - Middlewares
 - JWT tokens
