@@ -4,6 +4,7 @@ import (
 	"github.com/gocondor/core/cache"
 	"github.com/gocondor/core/database"
 	"github.com/gocondor/core/jwt"
+	"github.com/gocondor/core/sessions"
 	"gorm.io/gorm"
 )
 
@@ -13,12 +14,14 @@ var (
 	// Cache for cache manipulation
 	Cache *cache.CacheEngine
 	// JWT used for jwt tokens creation and validation
-	JWT *jwt.JWTUtil
+	JWT     *jwt.JWTUtil
+	Session *sessions.Sessions
 )
 
-// InitiateMiddlewaresDependencies to initiate the any dependency of the handlers
-func InitiateMiddlewaresDependencies() {
+// InitiateHandlersDependencies to initiate the any dependency of the handlers
+func InitiateHandlersDependencies() {
 	DB = database.Resolve()
 	Cache = cache.Resolve()
 	JWT = jwt.Resolve()
+	Session = sessions.Resolve()
 }

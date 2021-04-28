@@ -13,4 +13,5 @@ var Features *core.Features = &core.Features{
 	Database: false,
 	Cache:    false,
 	GRPC:     false,
+	Sessions: true,
 }
