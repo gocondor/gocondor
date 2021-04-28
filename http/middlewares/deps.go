@@ -19,7 +19,7 @@ var (
 )
 
 // InitiateHandlersDependencies to initiate the any dependency of the handlers
-func InitiateHandlersDependencies() {
+func InitiateMiddlewaresDependencies() {
 	DB = database.Resolve()
 	Cache = cache.Resolve()
 	JWT = jwt.Resolve()
