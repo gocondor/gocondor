@@ -16,6 +16,7 @@ GoCondor is a golang web framework with an `MVC` like architecture, it's based o
 - JWT tokens
 - ORM (GORM)
 - Sessions
+- Auth
 - Cache (Redis)
 - TLS
 - Live-Reloading for development
