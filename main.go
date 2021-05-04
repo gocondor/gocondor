@@ -11,6 +11,7 @@ import (
 	"github.com/gocondor/core"
 	"github.com/gocondor/gocondor/config"
 	"github.com/gocondor/gocondor/http"
+	"github.com/gocondor/gocondor/http/authentication"
 	"github.com/gocondor/gocondor/http/handlers"
 	"github.com/gocondor/gocondor/http/middlewares"
 	"github.com/gocondor/gocondor/models"
@@ -48,6 +49,11 @@ func main() {
 
 	// Register routes
 	http.RegisterRoutes()
+
+	// Register Auth
+	if config.Features.Auth == true {
+		authentication.RegisterAuthRoutes()
+	}
 
 	//auto migrate tables
 	if config.Features.Database == true {
