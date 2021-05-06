@@ -10,9 +10,9 @@ import (
 
 // Features helps you decide what features of the framework to use
 var Features *core.Features = &core.Features{
-	Database:       true,
+	Database:       false,
 	Cache:          false,
 	GRPC:           false,
-	Sessions:       true,
-	Authentication: true,
+	Sessions:       false,
+	Authentication: false,
 }
