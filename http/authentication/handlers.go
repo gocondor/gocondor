@@ -2,9 +2,7 @@ package authentication
 
 import (
 	"errors"
-	"fmt"
 	"net/http"
-	"strconv"
 
 	"github.com/gin-gonic/gin"
 	"github.com/gocondor/core/auth"
@@ -63,24 +61,16 @@ func Login(c *gin.Context) {
 		return
 	}
 
-	// prepare jwt token payload
-	tokenPayload := map[string]interface{}{
-		"userId": user.ID,
-	}
 	// generate the jwt token
-	token, err := JWT.CreateToken(tokenPayload)
+	token, err := JWT.CreateToken(user.ID)
 	if err != nil {
 		c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{
 			"message": "something went wrong",
 		})
 	}
 
-	// prepare the refresh token payload
-	refreshTokenPayload := map[string]interface{}{
-		"userId": user.ID,
-	}
 	// generate the token
-	refreshToken, err := JWT.CreateRefreshToken(refreshTokenPayload)
+	refreshToken, err := JWT.CreateRefreshToken(user.ID)
 	if err != nil {
 		c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{
 			"message": "something went wrong",
@@ -101,46 +91,8 @@ func Login(c *gin.Context) {
 
 func Logout(c *gin.Context) {
 	Auth := auth.Resolve()
-	JWT := jwt.Resolve()
 
-	// extract the jwt token
-	token, err := JWT.ExtractToken(c)
-	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{
-			"message": "something went wrong",
-		})
-		return
-	}
-	// decode the jwt token
-	payload, err := JWT.DecodeToken(token)
-	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{
-			"message": "something went wrong",
-		})
-		return
-	}
-	// get the user id of the token and convert it to uint64
-	userId, err := strconv.ParseUint(fmt.Sprintf("%v", payload["userId"]), 10, 64)
-	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{
-			"message": "something went wrong",
-		})
-		return
-	}
-
-	fmt.Println(Auth.Check(userId, c))
-
-	// log the user out only if he is authenticated
-	if Auth.Check(userId, c) {
-		// log the user out
-		err := Auth.Logout(userId, c)
-		if err != nil {
-			c.JSON(http.StatusInternalServerError, gin.H{
-				"message": err.Error(),
-			})
-			return
-		}
-	}
+	Auth.Logout(c)
 
 	c.JSON(http.StatusOK, gin.H{
 		"message": "logged out successfuly",
