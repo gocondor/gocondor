@@ -51,7 +51,7 @@ func main() {
 	http.RegisterRoutes()
 
 	// Register Auth
-	if config.Features.Auth == true {
+	if config.Features.Authentication == true {
 		authentication.RegisterAuthRoutes()
 	}
 
