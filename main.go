@@ -52,6 +52,10 @@ func main() {
 
 	// Register Auth
 	if config.Features.Authentication == true {
+		// make sure the database flag is on
+		if config.Features.Database == false {
+			log.Fatal("authentication requires database feature to be on")
+		}
 		authentication.RegisterAuthRoutes()
 	}
 
