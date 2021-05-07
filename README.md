@@ -16,7 +16,7 @@ GoCondor is a golang web framework with an `MVC` like architecture, it's based o
 - JWT tokens
 - ORM (GORM)
 - Sessions
-- Auth
+- Authentication
 - Cache (Redis)
 - TLS
 - Live-Reloading for development
@@ -90,7 +90,11 @@ func RegisterRoutes() {
 ```
 Next cd into the project folder and start the app by running the following command:
 ```bash
-gocondor run:dev
+go run main.go
+```
+or you can start it using `Air`
+```bash
+air main.go
 ```
 Finally, open up your browser and navigate to `localhost:8000/hello`.
 
