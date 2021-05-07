@@ -92,7 +92,7 @@ Next cd into the project folder and start the app by running the following comma
 ```bash
 go run main.go
 ```
-or you can start it using `Air`
+or you can start it using [Air](https://github.com/cosmtrek/air)
 ```bash
 air main.go
 ```
