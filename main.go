@@ -51,7 +51,7 @@ func main() {
 	http.RegisterRoutes()
 
 	// Register Auth
-	if config.Features.Authentication == true {
+	if config.Features.Authentication {
 		// make sure the database flag is on
 		if config.Features.Database == false {
 			log.Fatal("authentication requires database feature to be on")
@@ -60,7 +60,7 @@ func main() {
 	}
 
 	//auto migrate tables
-	if config.Features.Database == true {
+	if config.Features.Database {
 		models.MigrateDB()
 	}
 
