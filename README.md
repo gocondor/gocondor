@@ -15,7 +15,6 @@ GoCondor is a golang web framework with an `MVC` like architecture, it's based o
 - Middlewares
 - JWT tokens
 - ORM (GORM)
-- Sessions
 - Cache (Redis)
 - TLS
 - Live-Reloading for development
@@ -30,21 +29,23 @@ Handlers are simply methods that get executed when the matching request is recei
 
 ## Folder structure 
 ```bash
-├── condor
-│   ├── config/ ---------------> control what features to turn on
-│   ├── httpd/-----------------> http related code
-│   │   ├── handlers/ --------------> contains your requests handlers
-│   │   ├── middlewares/ -----------> middlewares are defined here
-│   ├── routes.go -------------> routes are mapped to their handlers here
-│   ├── logs/ -----------------> logs file is here
-│   ├── models/ ---------------> database models
-│   ├── ssl/ ------------------> ssl certificates goes here
-│   ├── .env ------------------> environment variables 
-│   ├── .gitignore ------------> .gitignore file
-│   ├── go.mod ----------------> Go modules that project depends on
-│   ├── LICENSE ---------------> license
-│   ├── main.go ---------------> main file
-│   ├── README.md -------------> readme file
+├── gocondor
+│   ├── config/ -------------------> condig variables
+│   ├── handlers/ -----------------> handlers for requests
+│   ├── logs/ ---------------------> app logs
+│   ├── middlewares/ --------------> app middlewares
+│   ├── models/ -------------------> database models
+│   ├── ssl/ ----------------------> ssl certificates
+│   ├── storage/ ------------------> storage for files
+│   ├── .env ----------------------> environment variables 
+│   ├── .gitignore ----------------> .gitignore
+│   ├── go.mod --------------------> Go modules
+│   ├── LICENSE -------------------> license
+│   ├── main.go -------------------> go main file
+│   ├── README.md -----------------> readme file
+│   ├── register-middlewares.go ---> register global middlewares
+│   ├── routes.go -----------------> app routes
+│   ├── run-auto-migrations.go ----> database migrations
 ```
 
 ## Installation
@@ -75,7 +76,7 @@ Let's add the route `/hello`, and lets have `hello there!` as the response.
 To do that Open the file `http/routes.go` in your editor, update the function `RegisterRoutes()`, make sure the it looks like below:
 ```go
 func RegisterRoutes() {
-    router := routing.Resolve()
+    router := core.ResolveRoiuter()
 
     // Define your routes here
     router.Get("/hello", func(c *gin.Context) {
