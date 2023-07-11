@@ -14,6 +14,6 @@ func GetRequestConfig() core.RequestConfig {
 
 	return core.RequestConfig{
 		// Set the max file upload size
-		MaxUploadFileSize: 20000000, // 20MB
+		MaxUploadFileSize: 20000000, // ~20MB
 	}
 }
