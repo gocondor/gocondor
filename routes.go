@@ -18,5 +18,6 @@ func registerRoutes() {
 	//#############################
 
 	// Define your routes here...
-	router.Get("/", handlers.HomeGet, middlewares.ExampleMiddleware)
+	// router.Post("/signup", handlers.Signup)
+	router.Get("/", handlers.ShowHome, middlewares.ExampleMiddleware)
 }
