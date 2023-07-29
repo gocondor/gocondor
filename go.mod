@@ -10,7 +10,7 @@ replace (
 go 1.20
 
 require (
-	github.com/gocondor/core v1.1.0
+	github.com/gocondor/core v1.5.0
 	github.com/joho/godotenv v1.5.1
 	github.com/julienschmidt/httprouter v1.3.0
 	gorm.io/gorm v1.25.2
@@ -30,9 +30,10 @@ require (
 	github.com/jinzhu/now v1.1.5 // indirect
 	github.com/mattn/go-sqlite3 v1.14.17 // indirect
 	github.com/redis/go-redis/v9 v9.0.5 // indirect
-	golang.org/x/crypto v0.9.0 // indirect
+	github.com/stretchr/testify v1.8.4 // indirect
+	golang.org/x/crypto v0.11.0 // indirect
 	golang.org/x/net v0.10.0 // indirect
-	golang.org/x/text v0.9.0 // indirect
+	golang.org/x/text v0.11.0 // indirect
 	gorm.io/driver/mysql v1.5.1 // indirect
 	gorm.io/driver/postgres v1.5.2 // indirect
 	gorm.io/driver/sqlite v1.5.2 // indirect
