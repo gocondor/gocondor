@@ -9,7 +9,7 @@ import (
 )
 
 // Show home page
-func HomeGet(c *core.Context) {
+func HomeGet(c *core.Context) *core.Response {
 	message := "{\"message\": \"Welcome to GoCondor\"}"
-	c.Response.WriteJson([]byte(message))
+	return c.Response.WriteJson([]byte(message))
 }

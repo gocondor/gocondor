@@ -6,3 +6,4 @@ logs/*
 !logs/.gitkeep
 ssl/*
 !ssl/.gitkeep
+.DS_Store

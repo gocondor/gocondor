@@ -13,7 +13,7 @@ import (
 	"gorm.io/gorm"
 )
 
-func Signup(c *core.Context) {
+func Signup(c *core.Context) *core.Response {
 	name := c.GetRequestParam("name")
 	email := c.GetRequestParam("email")
 	password := c.GetRequestParam("password")
@@ -22,18 +22,16 @@ func Signup(c *core.Context) {
 	res := c.GetGorm().Where("email = ?", c.InterfaceToString(email)).First(&user)
 	if res.Error != nil && !errors.Is(res.Error, gorm.ErrRecordNotFound) {
 		c.LogError(res.Error.Error())
-		c.Response.SetStatusCode(http.StatusInternalServerError).WriteJson([]byte(c.MapToJson(map[string]string{
+		return c.Response.SetStatusCode(http.StatusInternalServerError).WriteJson([]byte(c.MapToJson(map[string]string{
 			"status":  "error",
 			"message": "internal error",
 		})))
-		return
 	}
 	if (user != models.User{}) {
-		c.Response.SetStatusCode(http.StatusUnprocessableEntity).WriteJson([]byte(c.MapToJson(map[string]string{
+		return c.Response.SetStatusCode(http.StatusUnprocessableEntity).WriteJson([]byte(c.MapToJson(map[string]string{
 			"status":  "error",
 			"message": "email already exist in the database",
 		})))
-		return
 	}
 
 	// validate the input
@@ -48,33 +46,37 @@ func Signup(c *core.Context) {
 	})
 
 	if v.Failed() {
-		c.Response.SetStatusCode(http.StatusUnprocessableEntity).WriteJson([]byte(v.GetErrorMessagesJson()))
-		return
+		return c.Response.SetStatusCode(http.StatusUnprocessableEntity).WriteJson([]byte(v.GetErrorMessagesJson()))
 	}
 
 	//hash the password
 	passwordHashed, err := c.GetHashing().HashPassword(c.InterfaceToString(password))
 	if err != nil {
-		c.Response.SetStatusCode(http.StatusUnprocessableEntity).WriteJson([]byte(c.MapToJson(map[string]interface{}{
+		return c.Response.SetStatusCode(http.StatusUnprocessableEntity).WriteJson([]byte(c.MapToJson(map[string]interface{}{
 			"status":  "error",
 			"message": err.Error(),
 		})))
-		return
 	}
 
-	c.GetGorm().Create(&models.User{
+	res = c.GetGorm().Create(&models.User{
 		Name:     c.InterfaceToString(name),
 		Email:    c.InterfaceToString(email),
 		Password: passwordHashed,
 	})
+	if res.Error != nil {
+		return c.Response.SetStatusCode(http.StatusInternalServerError).WriteJson([]byte(c.MapToJson(map[string]string{
+			"status":  "error",
+			"message": res.Error.Error(),
+		})))
+	}
 
-	c.Response.WriteJson([]byte(c.MapToJson(map[string]string{
+	return c.Response.WriteJson([]byte(c.MapToJson(map[string]string{
 		"status":  "success",
 		"message": "user created successfully",
 	})))
 }
 
-func Signin(c *core.Context) {
+func Signin(c *core.Context) *core.Response {
 	email := c.GetRequestParam("email")
 	password := c.GetRequestParam("password")
 
@@ -87,45 +89,40 @@ func Signin(c *core.Context) {
 	})
 
 	if v.Failed() {
-		c.Response.SetStatusCode(http.StatusOK).WriteJson([]byte(v.GetErrorMessagesJson()))
-		return
+		return c.Response.SetStatusCode(http.StatusOK).WriteJson([]byte(v.GetErrorMessagesJson()))
 	}
 
 	var user models.User
 	res := c.GetGorm().Where("email = ?", c.InterfaceToString(email)).First(&user)
 	if res.Error != nil && !errors.Is(res.Error, gorm.ErrRecordNotFound) {
 		c.LogError(res.Error.Error())
-		c.Response.SetStatusCode(http.StatusInternalServerError).WriteJson([]byte(c.MapToJson(map[string]string{
+		return c.Response.SetStatusCode(http.StatusInternalServerError).WriteJson([]byte(c.MapToJson(map[string]string{
 			"status":  "error",
 			"message": "internal server error",
 		})))
-		return
 	}
 
 	if res.Error != nil && errors.Is(res.Error, gorm.ErrRecordNotFound) {
-		c.Response.SetStatusCode(http.StatusUnprocessableEntity).WriteJson([]byte(c.MapToJson(map[string]string{
+		return c.Response.SetStatusCode(http.StatusUnprocessableEntity).WriteJson([]byte(c.MapToJson(map[string]string{
 			"status":  "error",
 			"message": "wrong email or password",
 		})))
-		return
 	}
 
 	ok, err := c.GetHashing().CheckPasswordHash(user.Password, c.InterfaceToString(password))
 	if err != nil {
 		c.LogError(err.Error())
-		c.Response.SetStatusCode(http.StatusInternalServerError).WriteJson([]byte(c.MapToJson(map[string]string{
+		return c.Response.SetStatusCode(http.StatusInternalServerError).WriteJson([]byte(c.MapToJson(map[string]string{
 			"status":  "error",
 			"message": err.Error(),
 		})))
-		return
 	}
 
 	if !ok {
-		c.Response.SetStatusCode(http.StatusUnprocessableEntity).WriteJson([]byte(c.MapToJson(map[string]string{
+		return c.Response.SetStatusCode(http.StatusUnprocessableEntity).WriteJson([]byte(c.MapToJson(map[string]string{
 			"status":  "error",
 			"message": "wrong email or password",
 		})))
-		return
 	}
 
 	token, err := c.GetJWT().GenerateToken(map[string]interface{}{
@@ -134,13 +131,12 @@ func Signin(c *core.Context) {
 
 	if err != nil {
 		c.LogError(err.Error())
-		c.Response.SetStatusCode(http.StatusInternalServerError).WriteJson([]byte(c.MapToJson(map[string]string{
+		return c.Response.SetStatusCode(http.StatusInternalServerError).WriteJson([]byte(c.MapToJson(map[string]string{
 			"status":  "error",
 			"message": "internal server error",
 		})))
-		return
 	}
-	c.Response.WriteJson([]byte(c.MapToJson(map[string]string{
+	return c.Response.WriteJson([]byte(c.MapToJson(map[string]string{
 		"status": "success",
 		"token":  token,
 	})))
