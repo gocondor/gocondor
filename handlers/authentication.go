@@ -143,6 +143,6 @@ func Signin(c *core.Context) *core.Response {
 }
 
 // TODO implement
-func ResetPassword(c *core.Context) {
-
+func ResetPassword(c *core.Context) *core.Response {
+	return nil
 }

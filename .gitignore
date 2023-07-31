@@ -4,6 +4,6 @@ go.sum
 tmp/*
 logs/*
 !logs/.gitkeep
-ssl/*
-!ssl/.gitkeep
+tls/*
+!tls/.gitkeep
 .DS_Store
