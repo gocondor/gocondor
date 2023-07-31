@@ -1,6 +1,8 @@
-go.sum
+.air.toml
+.env
 tmp/*
 logs/*
 !logs/.gitkeep
-ssl/*
-!ssl/.gitkeep
+tls/*
+!tls/.gitkeep
+.DS_Store
