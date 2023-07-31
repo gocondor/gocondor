@@ -10,7 +10,7 @@ replace (
 go 1.20
 
 require (
-	github.com/gocondor/core v1.5.0
+	github.com/gocondor/core v1.5.1-0.20230731184823-abb0c112f38d
 	github.com/joho/godotenv v1.5.1
 	github.com/julienschmidt/httprouter v1.3.0
 	gorm.io/gorm v1.25.2
