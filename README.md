@@ -96,7 +96,7 @@ func SayHelloWorld(c *core.Context) *core.Response {
 	return c.Response.WriteJson([]byte(resJson))
 }
 ```
-Next, add the route ==router.Get("/", handlers.SayHelloWorld)== to the file `./routes.go` like below:
+Next, add the route `router.Get("/", handlers.SayHelloWorld)` to the file `./routes.go` like below:
 
 ```go
 package main
