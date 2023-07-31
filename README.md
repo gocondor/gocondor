@@ -1,51 +1,51 @@
-![gocondor logo](https://github.com/gocondor/gocondor.github.io/raw/master/img/logo.png)
+![gocondor logo](https://github.com/gocondor/gocondor.github.io/raw/main/img/logo.png)
 # GoCondor
 
-![Build Status](https://github.com/gocondor/gocondor/actions/workflows/build-master.yml/badge.svg)
-![Test Status](https://github.com/gocondor/gocondor/actions/workflows/test-master.yml/badge.svg)
+![Build Status](https://github.com/gocondor/gocondor/actions/workflows/build-main.yml/badge.svg)
+![Test Status](https://github.com/gocondor/gocondor/actions/workflows/test-main.yml/badge.svg)
 [![GoDoc](https://godoc.org/github.com/gocondor/gocondor?status.svg)](https://godoc.org/github.com/gocondor/gocondor)
 [![Go Report Card](https://goreportcard.com/badge/github.com/gocondor/gocondor)](https://goreportcard.com/report/github.com/gocondor/gocondor)
 
 ## What is GoCondor?
-GoCondor is a golang web framework with an `MVC` like architecture, it's based on [Gin framework](https://github.com/gin-gonic/gin), it features a simple organized directory structure for your next project with a pleasant development experience, made for developing modern APIs and microservices.
+GoCondor is a Golang web framework for building APIs, it features a simple directory structure for your next project with a pleasant & fast development experience, suitable for small & medium size projects and microservices
 
-## Features 
-- Router
-- Routing Groups
+## Main Features 
+- Routing
 - Middlewares
 - JWT tokens
-- ORM (GORM)
+- Multiple Databases ORM (GORM)
 - Cache (Redis)
-- TLS
-- Live-Reloading for development
-- Features Control
+-  HTTPS (TLS)
+- Multiple Environment variables sources (.env file & OS)
+
+
 
 ## Architecture
-The architecture is similar to `MVC`, where there is a routes file `http/routes.go` in which you can map all your app routes to their handlers.
-Handlers are simply methods that get executed when the matching request is received, you can think of it like a controller's action in `MVC`.
+The architecture is similar to `MVC`, where there is a routes file `./routes.go` in which you can map all your app routes to their handlers.
+Handlers are simply methods that handles the requests to the given routes
 
 #### The request journey:
-`Request -> Routing -> Middleware -> Handler -> Middleware -> Json Response`
+`Request -> Router -> Optional Middleware -> Handler -> Optional Middleware ->  Response`
 
 ## Folder structure 
 ```bash
 ├── gocondor
-│   ├── config/ -------------------> condig variables
-│   ├── handlers/ -----------------> handlers for requests
-│   ├── logs/ ---------------------> app logs
-│   ├── middlewares/ --------------> app middlewares
-│   ├── models/ -------------------> database models
-│   ├── ssl/ ----------------------> ssl certificates
-│   ├── storage/ ------------------> storage for files
-│   ├── .env ----------------------> environment variables 
-│   ├── .gitignore ----------------> .gitignore
-│   ├── go.mod --------------------> Go modules
-│   ├── LICENSE -------------------> license
-│   ├── main.go -------------------> go main file
-│   ├── README.md -----------------> readme file
-│   ├── register-middlewares.go ---> register global middlewares
-│   ├── routes.go -----------------> app routes
-│   ├── run-auto-migrations.go ----> database migrations
+│   ├── config/ --------------------------> main configs
+│   ├── handlers/ ------------------------> route's handlers
+│   ├── logs/ ----------------------------> app log files
+│   ├── middlewares/ ---------------------> app middlewares
+│   ├── models/ --------------------------> database models
+│   ├── tls/ -----------------------------> tls certificates
+│   ├── storage/ -------------------------> a place to store files
+│   ├── .env -----------------------------> environment variables 
+│   ├── .gitignore -----------------------> .gitignore
+│   ├── go.mod ---------------------------> Go modules
+│   ├── LICENSE --------------------------> license
+│   ├── main.go --------------------------> go main file
+│   ├── README.md ------------------------> readme file
+│   ├── register-global-middlewares.go ---> register global middlewares
+│   ├── routes.go ------------------------> app routes
+│   ├── run-auto-migrations.go -----------> database migrations
 ```
 
 ## Installation
@@ -54,45 +54,81 @@ To create a new GoCondor project you need to install the `gocondor cli` first
 #### Install GoCondor cli
 To install the `gocondor cli` globally open up your terminal and run the following command:
 ```bash
-go get github.com/gocondor/installer/gocondor
+go install github.com/gocondor/installer/gocondor@latest
 ```
 
 #### Create a new project:
 The command for creating a new project is the following:
 ```bash
-gocondor new [project-name] [project-location]
+gocondor new [project-name] [remote-location]
+# example:
+# gocondor new my-project github.com/gocondor/my-project
 ```
 where:
 `project-name` is the name of your project
-`project-location` is the remote repository that will host the project, usually people use `github.com`
+`remote-location` is the remote repository that will host the project, usually people use `github.com`
 
-Now let's create a project with the name `todo` and let's assume it's hosted on the repository `github.com/my-organization/todo`, here is the command to create that project
-```bash
-gocondor new todo github.com/my-organization/todo
-```
 
 ## Getting started
-Let's add the route `/hello`, and lets have `hello there!` as the response.
-To do that Open the file `http/routes.go` in your editor, update the function `RegisterRoutes()`, make sure the it looks like below:
+Let's create an app that returns `hello world` as a response.
+First create a project with the name `helloapp` by running the following command:
+```bash
+gocondor new helloapp github.com/gocondor/helloapp
+```
+Next `cd` into the project and create the file `handlers/greeting-handlers.go` with the following content:
+
+ `#file: handlers/greeting-handlers.go`
 ```go
-func RegisterRoutes() {
-    router := core.ResolveRoiuter()
+package handlers
 
-    // Define your routes here
-    router.Get("/hello", func(c *gin.Context) {
-        message := "hello there!"
+import "github.com/gocondor/core"
 
-        c.JSON(http.StatusOK, gin.H{
-            "message": message,
-        })
-    })
+// Returns hello world
+func SayHelloWorld(c *core.Context) *core.Response {
+	// create a map variable with the desired response
+	res := map[string]string{
+		"message": "Hello World!",
+	}
+	// convert the map into JSON
+	resJson := c.MapToJson(res)
+
+	// return the response
+	return c.Response.WriteJson([]byte(resJson))
 }
 ```
-Next cd into the project folder and start the app by running the following command:
-```bash
-gocondor run:dev
+Next, add the route ==router.Get("/", handlers.SayHelloWorld)== to the file `./routes.go` like below:
+
+```go
+package main
+
+import (
+	"github.com/gocondor/core"
+	"github.com/gocondor/helloapp/handlers"
+)
+
+// Register the app routes
+func registerRoutes() {
+	router := core.ResolveRouter()
+	//#############################
+	//# App Routes            #####
+	//#############################
+
+	// Define your routes here...
+	router.Get("/", handlers.SayHelloWorld)
+}
 ```
-Finally, open up your browser and navigate to `localhost:8000/hello`.
+Next, build the project by running the following command,in the terminal:
+```go
+go build
+```
+this will produce a `binary` file with the name `helloapp` in the root of your project
+
+Next, run the app by executing the binary by running the following command:
+```go
+./helloapp
+```
+
+Finally, open up your browser and navigate to `localhost:8000`.
 
 To learn how to create handlers files and how to add handlers to them check [handlers docs](https://gocondor.github.io/docs/handlers)
 
