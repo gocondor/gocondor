@@ -7,22 +7,23 @@
 [![Go Report Card](https://goreportcard.com/badge/github.com/gocondor/gocondor)](https://goreportcard.com/report/github.com/gocondor/gocondor)
 
 ## What is GoCondor?
-GoCondor is a Golang web framework for building APIs, it features a simple directory structure for your next project with a pleasant & fast development experience, suitable for small & medium size projects and microservices
+GoCondor is a Golang web framework made for building web APIs, suitable for small & medium size projects and microservices. with it's simple structure, developer friendly experience it makes developers happly more productive.
+
 
 ## Main Features 
 - Routing
 - Middlewares
+- Validation
+- Databases ORM (GORM)
+- Emails
 - JWT tokens
-- Multiple Databases ORM (GORM)
 - Cache (Redis)
--  HTTPS (TLS)
-- Multiple Environment variables sources (.env file & OS)
+- HTTPS (TLS)
 
 
 
 ## Architecture
-The architecture is similar to `MVC`, where there is a routes file `./routes.go` in which you can map all your app routes to their handlers.
-Handlers are simply methods that handles the requests to the given routes
+The architecture is similar to `MVC`, where there is a routes file `./routes.go` in which you can map all your app routes to their handlers which resides in the directory `./handlers`. Handlers are simply methods that handles requests (GET, POST, ... etch) to the given routes.
 
 #### The request journey:
 `Request -> Router -> Optional Middleware -> Handler -> Optional Middleware ->  Response`
