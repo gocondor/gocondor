@@ -14,7 +14,7 @@ GoCondor is a Golang web framework made for building web APIs, suitable for smal
 - Routing
 - Middlewares
 - Validation
-- Databases ORM (GORM)
+- Databases ORM (GORM integrated)
 - Emails
 - JWT tokens
 - Cache (Redis)
