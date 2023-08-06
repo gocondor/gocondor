@@ -119,13 +119,12 @@ git clone git@github.com:gocondor/gocondor.git
 module github.com/gocondor/gocondor
 
 replace (
- github.com/gocondor/core => C:/Users/myname/go/src/github.com/gocondor/core
+github.com/gocondor/core => /path-to-go-workspace/src/ginthub.com/gocondor
 
- github.com/gocondor/gocondor/config => ./config
- github.com/gocondor/gocondor/http => ./http
- github.com/gocondor/gocondor/http/middlewares => ./http/middlewares
- github.com/gocondor/gocondor/handlers => ./http/handlers
- github.com/gocondor/gocondor/models => ./models
+github.com/gocondor/gocondor/config => ./config
+github.com/gocondor/gocondor/handlers => ./handlers
+github.com/gocondor/gocondor/middlewares => ./middlewares
+github.com/gocondor/gocondor/models => ./models
 )
 ```
 Note:
