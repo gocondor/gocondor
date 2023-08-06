@@ -71,67 +71,28 @@ where:
 
 
 ## Getting started
-Let's create an app that returns `hello world` as a response.
-First create a project with the name `helloapp` by running the following command:
-```bash
-gocondor new helloapp github.com/gocondor/helloapp
-```
-Next `cd` into the project and create the file `handlers/greeting-handlers.go` with the following content:
+Let's create a route that returns `hello world`
+Open up the file `routes.go` in the root of your project and add to it the code below:
+```go "defining a route"
+	router.Get("/", func(c *core.Context) *core.Response {
+		JsonString := `{"message": "hello world"}`
 
- `#file: handlers/greeting-handlers.go`
+		return c.Response.Json(JsonString)
+	})
+```
+Next, build the project by running the following command in the terminal:
 ```go
-package handlers
-
-import "github.com/gocondor/core"
-
-// Returns hello world
-func SayHelloWorld(c *core.Context) *core.Response {
-	// create a map variable with the desired response
-	res := map[string]string{
-		"message": "Hello World!",
-	}
-	// convert the map into JSON
-	resJson := c.MapToJson(res)
-
-	// return the response
-	return c.Response.WriteJson([]byte(resJson))
-}
+go build -o ./
 ```
-Next, add the route `router.Get("/", handlers.SayHelloWorld)` to the file `./routes.go` like below:
+this will produce an executable file with the name of your project in the root directory of your project
 
+Next, run the executable file using following command:
 ```go
-package main
-
-import (
-	"github.com/gocondor/core"
-	"github.com/gocondor/helloapp/handlers"
-)
-
-// Register the app routes
-func registerRoutes() {
-	router := core.ResolveRouter()
-	//#############################
-	//# App Routes            #####
-	//#############################
-
-	// Define your routes here...
-	router.Get("/", handlers.SayHelloWorld)
-}
+./[name-of-the-executable-file]
 ```
-Next, build the project by running the following command,in the terminal:
-```go
-go build
-```
-this will produce a `binary` file with the name `helloapp` in the root of your project
+Finally, open up your browser and navigate to `localhost:8000`
 
-Next, run the app by executing the binary by running the following command:
-```go
-./helloapp
-```
-
-Finally, open up your browser and navigate to `localhost:8000`.
-
-To learn how to create handlers files and how to add handlers to them check [handlers docs](https://gocondor.github.io/docs/handlers)
+To learn more check the [routing docs section](https://gocondor.github.io/docs/routing)
 
 
 ## Contribute
