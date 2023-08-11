@@ -20,6 +20,24 @@ GoCondor is a Golang web framework made for building web APIs, suitable for smal
 - Cache (Redis)
 - HTTPS (TLS)
 
+## Getting started
+Let's create a route that returns `hello world`
+Open up the file `routes.go` in the root of your project and add to it the code below:
+```go "defining a route"
+	router.Get("/", func(c *core.Context) *core.Response {
+		JsonString := `{"message": "hello world"}`
+
+		return c.Response.Json(JsonString)
+	})
+```
+Next, in your terminal navigate to the project dir and run the following command:
+```go
+gocondor run:dev
+```
+Finally, open up your browser and navigate to `localhost:8000`
+
+To learn more check the [routing docs section](https://gocondor.github.io/docs/routing)
+
 
 
 ## Architecture
@@ -68,26 +86,6 @@ gocondor new [project-name] [remote-location]
 where:
 `project-name` is the name of your project
 `remote-location` is the remote repository that will host the project, usually people use `github.com`
-
-
-## Getting started
-Let's create a route that returns `hello world`
-Open up the file `routes.go` in the root of your project and add to it the code below:
-```go "defining a route"
-	router.Get("/", func(c *core.Context) *core.Response {
-		JsonString := `{"message": "hello world"}`
-
-		return c.Response.Json(JsonString)
-	})
-```
-Next, in your terminal navigate to the project dir and run the following command:
-```go
-gocondor run:dev
-```
-Finally, open up your browser and navigate to `localhost:8000`
-
-To learn more check the [routing docs section](https://gocondor.github.io/docs/routing)
-
 
 ## Contribute
 The framework consists of two main parts, each lives in a separate repository, the first part is the `core` which contains the framework core packages. the second part is `gocondor` which has the project folder structure and responsible of gluing everything together.
