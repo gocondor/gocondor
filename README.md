@@ -20,6 +20,15 @@ GoCondor is a Golang web framework made for building web APIs, suitable for smal
 - Cache (Redis)
 - HTTPS (TLS)
 
+## Installation
+To create a new GoCondor project you need to install the `gocondor cli` first
+
+#### Install GoCondor cli
+To install the `gocondor cli` globally open up your terminal and run the following command:
+```bash
+go install github.com/gocondor/installer/gocondor@latest
+```
+
 ## Getting started
 Let's create a route that returns `hello world`
 Open up the file `routes.go` in the root of your project and add to it the code below:
@@ -65,15 +74,6 @@ The architecture is similar to `MVC`, where there is a routes file `./routes.go`
 │   ├── register-global-middlewares.go ---> register global middlewares
 │   ├── routes.go ------------------------> app routes
 │   ├── run-auto-migrations.go -----------> database migrations
-```
-
-## Installation
-To create a new GoCondor project you need to install the `gocondor cli` first
-
-#### Install GoCondor cli
-To install the `gocondor cli` globally open up your terminal and run the following command:
-```bash
-go install github.com/gocondor/installer/gocondor@latest
 ```
 
 #### Create a new project:
