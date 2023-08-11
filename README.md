@@ -1,4 +1,4 @@
-![gocondor logo](https://gocondor.github.io/img/logo.png)
+![gocondor logo](https://gocondor.github.io/img/logo_x168.png)
 # GoCondor
 
 ![Build Status](https://github.com/gocondor/gocondor/actions/workflows/build-main.yml/badge.svg)
@@ -80,15 +80,9 @@ Open up the file `routes.go` in the root of your project and add to it the code 
 		return c.Response.Json(JsonString)
 	})
 ```
-Next, build the project by running the following command in the terminal:
+Next, in your terminal navigate to the project dir and run the following command:
 ```go
-go build -o ./
-```
-this will produce an executable file with the name of your project in the root directory of your project
-
-Next, run the executable file using following command:
-```go
-./[name-of-the-executable-file]
+gocondor run:dev
 ```
 Finally, open up your browser and navigate to `localhost:8000`
 
