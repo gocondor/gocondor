@@ -7,13 +7,12 @@
 [![Go Report Card](https://goreportcard.com/badge/github.com/gocondor/gocondor)](https://goreportcard.com/report/github.com/gocondor/gocondor)
 
 ## What is GoCondor?
-GoCondor is a Golang web framework made for building web APIs, suitable for small & medium size projects and microservices. with it's simple structure, developer friendly experience it makes developers happly more productive.
-
+GoCondor is a [Go](https://go.dev) web framework made for building web APIs, suitable for small, medium size and microservices projects. With it's simple structure, and developer friendly experience it helps with increasing the productivity.
 
 ## Main Features 
 - Routing
 - Middlewares
-- Validation
+- Data Validation
 - Databases ORM ([GORM](https://gorm.io/) integrated)
 - Emails
 - JWT tokens
@@ -21,17 +20,31 @@ GoCondor is a Golang web framework made for building web APIs, suitable for smal
 - HTTPS (TLS)
 
 ## Installation
-To create a new GoCondor project you need to install the `gocondor cli` first
+To create a new `GoCondor` project you need to install the `GoCondor's cli` first
 
-#### Install GoCondor cli
+##### Install GoCondor cli globally
 To install the `gocondor cli` globally open up your terminal and run the following command:
 ```bash
-go install github.com/gocondor/installer/gocondor@latest
+go install github.com/gocondor/cli/gocondor@latest
 ```
 
+##### Create a new project:
+Here is how you can create new projects:
+```bash
+gocondor new [project-name] [remote-location]
+# example:
+# gocondor new my-project github.com/gocondor/my-project
+```
+where:
+`project-name` is the name of your project
+`remote-location` is the remote repository that will host the project, typically `github.com` is used
+
 ## Getting started
+First make sure you have [GoCondor's cli](https://gocondor.github.io/docs/installation) installed.
+
 Let's create a route that returns `hello world`
-Open up the file `routes.go` in the root of your project and add to it the code below:
+
+Open up the file `routes.go` in the root directory of your project and add the following code:
 ```go "defining a route"
 	router.Get("/", func(c *core.Context) *core.Response {
 		JsonString := `{"message": "hello world"}`
@@ -43,17 +56,18 @@ Next, in your terminal navigate to the project dir and run the following command
 ```go
 gocondor run:dev
 ```
-Finally, open up your browser and navigate to `localhost:8000`
+Finally, open up your browser and navigate to `http://localhost`
 
 To learn more check the [routing docs section](https://gocondor.github.io/docs/routing)
-
 
 
 ## Architecture
 The architecture is similar to `MVC`, where there is a routes file `./routes.go` in which you can map all your app routes to their handlers which resides in the directory `./handlers`. Handlers are simply methods that handles requests (GET, POST, ... etch) to the given routes.
 
-#### The request journey:
-`Request -> Router -> Optional Middleware -> Handler -> Optional Middleware ->  Response`
+## The request journey:
+The first component that receive's the request in `GoCondor` is the `Router`,
+then `GoCondor` locates the matching [handler](https://gocondor.github.io/docs/handlers) of the request and it check's if there are any [middlewares](https://gocondor.github.io/docs/middlewares) to be executed either before or after the [handler](https://gocondor.github.io/docs/handlers), if so, it executes them in the right order, then at the final stage it returns the response to the user.
+`Request -> Router -> Optional Middlewares -> Handler -> Optional Middlewares ->  Response`
 
 ## Folder structure 
 ```bash
@@ -75,17 +89,6 @@ The architecture is similar to `MVC`, where there is a routes file `./routes.go`
 │   ├── routes.go ------------------------> app routes
 │   ├── run-auto-migrations.go -----------> database migrations
 ```
-
-#### Create a new project:
-The command for creating a new project is the following:
-```bash
-gocondor new [project-name] [remote-location]
-# example:
-# gocondor new my-project github.com/gocondor/my-project
-```
-where:
-`project-name` is the name of your project
-`remote-location` is the remote repository that will host the project, usually people use `github.com`
 
 ## Contribute
 The framework consists of two main parts, each lives in a separate repository, the first part is the `core` which contains the framework core packages. the second part is `gocondor` which has the project folder structure and responsible of gluing everything together.
