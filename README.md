@@ -7,7 +7,7 @@
 [![Go Report Card](https://goreportcard.com/badge/github.com/gocondor/gocondor)](https://goreportcard.com/report/github.com/gocondor/gocondor)
 
 ## What is GoCondor?
-GoCondor is a Golang web framework made for building web APIs, suitable for small & medium size projects and microservices. with it's simple structure, developer friendly experience it makes developers happly more productive.
+GoCondor is a Golang web framework made for building web APIs, suitable for small, medium size and microservices projects. With it's simple structure, and developer friendly experience it helps with increasing the productivity.
 
 ## Main Features 
 - Routing
@@ -20,16 +20,16 @@ GoCondor is a Golang web framework made for building web APIs, suitable for smal
 - HTTPS (TLS)
 
 ## Installation
-To create a new GoCondor project you need to install the `GoCondor's cli` first
+To create a new `GoCondor` project you need to install the `GoCondor's cli` first
 
-##### Install GoCondor cli
+##### Install GoCondor cli globally
 To install the `gocondor cli` globally open up your terminal and run the following command:
 ```bash
-go install github.com/gocondor/installer/gocondor@latest
+go install github.com/gocondor/cli/gocondor@latest
 ```
 
 ##### Create a new project:
-The command for creating a new project is the following:
+Here is how you can create new projects:
 ```bash
 gocondor new [project-name] [remote-location]
 # example:
@@ -37,7 +37,7 @@ gocondor new [project-name] [remote-location]
 ```
 where:
 `project-name` is the name of your project
-`remote-location` is the remote repository that will host the project, usually people use `github.com`
+`remote-location` is the remote repository that will host the project, typically `github.com` is used
 
 ## Getting started
 First make sure you have [GoCondor's cli](https://gocondor.github.io/docs/installation) installed.
