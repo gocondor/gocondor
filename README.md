@@ -9,7 +9,6 @@
 ## What is GoCondor?
 GoCondor is a Golang web framework made for building web APIs, suitable for small & medium size projects and microservices. with it's simple structure, developer friendly experience it makes developers happly more productive.
 
-
 ## Main Features 
 - Routing
 - Middlewares
@@ -21,15 +20,27 @@ GoCondor is a Golang web framework made for building web APIs, suitable for smal
 - HTTPS (TLS)
 
 ## Installation
-To create a new GoCondor project you need to install the `gocondor cli` first
+To create a new GoCondor project you need to install the `GoCondor's cli` first
 
-#### Install GoCondor cli
+##### Install GoCondor cli
 To install the `gocondor cli` globally open up your terminal and run the following command:
 ```bash
 go install github.com/gocondor/installer/gocondor@latest
 ```
 
+##### Create a new project:
+The command for creating a new project is the following:
+```bash
+gocondor new [project-name] [remote-location]
+# example:
+# gocondor new my-project github.com/gocondor/my-project
+```
+where:
+`project-name` is the name of your project
+`remote-location` is the remote repository that will host the project, usually people use `github.com`
+
 ## Getting started
+First make sure you have [GoCondor's cli](https://gocondor.github.io/docs/installation) installed.
 Let's create a route that returns `hello world`
 Open up the file `routes.go` in the root of your project and add to it the code below:
 ```go "defining a route"
@@ -52,8 +63,10 @@ To learn more check the [routing docs section](https://gocondor.github.io/docs/r
 ## Architecture
 The architecture is similar to `MVC`, where there is a routes file `./routes.go` in which you can map all your app routes to their handlers which resides in the directory `./handlers`. Handlers are simply methods that handles requests (GET, POST, ... etch) to the given routes.
 
-#### The request journey:
-`Request -> Router -> Optional Middleware -> Handler -> Optional Middleware ->  Response`
+## The request journey:
+The first component that receive's the request in `GoCondor` is the `Router`,
+then `GoCondor` locates the matching [handler](https://gocondor.github.io/docs/handlers) of the request and it check's if there are any [middlewares](https://gocondor.github.io/docs/middlewares) to be executed either before or after the [handler](https://gocondor.github.io/docs/handlers), if so, it executes them in the right order, then at the final stage it returns the response to the user.
+`Request -> Router -> Optional Middlewares -> Handler -> Optional Middlewares ->  Response`
 
 ## Folder structure 
 ```bash
@@ -75,17 +88,6 @@ The architecture is similar to `MVC`, where there is a routes file `./routes.go`
 │   ├── routes.go ------------------------> app routes
 │   ├── run-auto-migrations.go -----------> database migrations
 ```
-
-#### Create a new project:
-The command for creating a new project is the following:
-```bash
-gocondor new [project-name] [remote-location]
-# example:
-# gocondor new my-project github.com/gocondor/my-project
-```
-where:
-`project-name` is the name of your project
-`remote-location` is the remote repository that will host the project, usually people use `github.com`
 
 ## Contribute
 The framework consists of two main parts, each lives in a separate repository, the first part is the `core` which contains the framework core packages. the second part is `gocondor` which has the project folder structure and responsible of gluing everything together.
