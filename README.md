@@ -7,12 +7,12 @@
 [![Go Report Card](https://goreportcard.com/badge/github.com/gocondor/gocondor)](https://goreportcard.com/report/github.com/gocondor/gocondor)
 
 ## What is GoCondor?
-GoCondor is a Golang web framework made for building web APIs, suitable for small, medium size and microservices projects. With it's simple structure, and developer friendly experience it helps with increasing the productivity.
+GoCondor is a [Go](https://go.dev) web framework made for building web APIs, suitable for small, medium size and microservices projects. With it's simple structure, and developer friendly experience it helps with increasing the productivity.
 
 ## Main Features 
 - Routing
 - Middlewares
-- Validation
+- Data Validation
 - Databases ORM ([GORM](https://gorm.io/) integrated)
 - Emails
 - JWT tokens
