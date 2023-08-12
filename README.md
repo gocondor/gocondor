@@ -41,8 +41,10 @@ where:
 
 ## Getting started
 First make sure you have [GoCondor's cli](https://gocondor.github.io/docs/installation) installed.
+
 Let's create a route that returns `hello world`
-Open up the file `routes.go` in the root of your project and add to it the code below:
+
+Open up the file `routes.go` in the root directory of your project and add the following code:
 ```go "defining a route"
 	router.Get("/", func(c *core.Context) *core.Response {
 		JsonString := `{"message": "hello world"}`
@@ -54,10 +56,9 @@ Next, in your terminal navigate to the project dir and run the following command
 ```go
 gocondor run:dev
 ```
-Finally, open up your browser and navigate to `localhost:8000`
+Finally, open up your browser and navigate to `http://localhost`
 
 To learn more check the [routing docs section](https://gocondor.github.io/docs/routing)
-
 
 
 ## Architecture
