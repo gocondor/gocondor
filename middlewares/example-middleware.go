@@ -11,8 +11,7 @@ import (
 )
 
 // Example middleware
-var ExampleMiddleware core.Handler = func(c *core.Context) *core.Response {
+var ExampleMiddleware core.Middleware = func(c *core.Context) {
 	fmt.Println("example middleware!")
 	c.Next()
-	return nil
 }
