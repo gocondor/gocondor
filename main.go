@@ -44,6 +44,7 @@ func main() {
 	app.Bootstrap()
 	registerGlobalMiddlewares()
 	registerRoutes()
+	registerEvents()
 	runAutoMigrations()
 	app.Run(httprouter.New())
 }
