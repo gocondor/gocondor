@@ -5,5 +5,5 @@ import (
 )
 
 var TestEvent core.EventJob = func(event *core.Event, c *core.Context) {
-	c.LogInfo("hello from event test job")
+	c.GetLogger().Info("hello from event test job")
 }
