@@ -29,26 +29,26 @@ func Signup(c *core.Context) *core.Response {
 			"message": "internal error",
 		}))
 	}
-
 	if res.Error == nil {
 		return c.Response.SetStatusCode(http.StatusUnprocessableEntity).Json(c.MapToJson(map[string]string{
 			"message": "email already exists in the database",
 		}))
 	}
 
-	// validate the input
+	// validation data
 	data := map[string]interface{}{
 		"name":     name,
 		"email":    email,
 		"password": password,
 	}
+	// validation rules
 	rules := map[string]interface{}{
 		"name":     "required|alphaNumeric",
 		"email":    "required|email",
 		"password": "required|length:6,10",
 	}
+	// validate
 	v := c.GetValidator().Validate(data, rules)
-
 	if v.Failed() {
 		c.GetLogger().Error(v.GetErrorMessagesJson())
 		return c.Response.SetStatusCode(http.StatusUnprocessableEntity).Json(v.GetErrorMessagesJson())
@@ -62,6 +62,7 @@ func Signup(c *core.Context) *core.Response {
 			"message": err.Error(),
 		}))
 	}
+	// store the record in db
 	user = models.User{
 		Name:     c.CastToString(name),
 		Email:    c.CastToString(email),
@@ -75,6 +76,28 @@ func Signup(c *core.Context) *core.Response {
 		}))
 	}
 
+	token, err := c.GetJWT().GenerateToken(map[string]interface{}{
+		"userID": user.ID,
+	})
+
+	if err != nil {
+		c.GetLogger().Error(err.Error())
+		return c.Response.SetStatusCode(http.StatusInternalServerError).Json(c.MapToJson(map[string]string{
+			"message": "internal server error",
+		}))
+	}
+	// cache the token
+	userAgent := c.Request.HttpRequest.UserAgent()
+	cacheKey := fmt.Sprintf("userid:_%v_useragent:_%v_jwt_token", user.ID, userAgent)
+	hashedCacheKey := c.CastToString(fmt.Sprintf("%x", md5.Sum([]byte(cacheKey))))
+	err = c.GetCache().Set(hashedCacheKey, token)
+	if err != nil {
+		return c.Response.SetStatusCode(http.StatusInternalServerError).Json(c.MapToJson(map[string]interface{}{
+			"message": err.Error(),
+		}))
+	}
+
+	// fire user registered event
 	err = c.GetEventsManager().Fire(&core.Event{Name: events.USER_REGISTERED, Payload: map[string]interface{}{
 		"userStruct": user,
 	}})
@@ -86,7 +109,7 @@ func Signup(c *core.Context) *core.Response {
 	}
 
 	return c.Response.Json(c.MapToJson(map[string]string{
-		"message": "user created successfully",
+		"token": token,
 	}))
 }
 
