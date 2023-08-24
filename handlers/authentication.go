@@ -219,7 +219,15 @@ func ResetPassword(c *core.Context) *core.Response {
 		}))
 	}
 
-	// TODO send email reset email
+	// TODO
+	// 1- handle the err
+	// 2- send reset password email
+	err := c.GetEventsManager().Fire(&core.Event{
+		Name: events.USER_PASSWORD_RESET_REQUESTED,
+		Payload: map[string]interface{}{
+			"userStruct": user,
+		},
+	})
 
 	return nil
 }
