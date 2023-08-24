@@ -186,7 +186,45 @@ func Signin(c *core.Context) *core.Response {
 	}))
 }
 
-// TODO implement
 func ResetPassword(c *core.Context) *core.Response {
+	email := c.GetRequestParam("email")
+
+	// validation data
+	data := map[string]interface{}{
+		"email": email,
+	}
+	// validation rules
+	rules := map[string]interface{}{
+		"email": "required|email",
+	}
+	// validate
+	v := c.GetValidator().Validate(data, rules)
+	if v.Failed() {
+		c.GetLogger().Error(v.GetErrorMessagesJson())
+		return c.Response.SetStatusCode(http.StatusUnprocessableEntity).Json(v.GetErrorMessagesJson())
+	}
+
+	// check email in the database
+	var user models.User
+	res := c.GetGorm().Where("email = ?", c.CastToString(email)).First(&user)
+	if res.Error != nil && !errors.Is(res.Error, gorm.ErrRecordNotFound) {
+		c.GetLogger().Error(res.Error.Error())
+		return c.Response.SetStatusCode(http.StatusInternalServerError).Json(c.MapToJson(map[string]string{
+			"message": "internal error",
+		}))
+	}
+	if res.Error != nil && errors.Is(res.Error, gorm.ErrRecordNotFound) {
+		return c.Response.SetStatusCode(http.StatusUnprocessableEntity).Json(c.MapToJson(map[string]string{
+			"message": "email not found in our database",
+		}))
+	}
+
+	// TODO send email reset email
+
+	return nil
+}
+
+// TODO implement
+func ChangePassword(c *core.Context) *core.Response {
 	return nil
 }
