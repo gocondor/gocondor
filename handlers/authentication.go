@@ -5,7 +5,9 @@
 package handlers
 
 import (
+	"crypto/md5"
 	"errors"
+	"fmt"
 	"net/http"
 
 	"github.com/gocondor/core"
@@ -22,39 +24,41 @@ func Signup(c *core.Context) *core.Response {
 	var user models.User
 	res := c.GetGorm().Where("email = ?", c.CastToString(email)).First(&user)
 	if res.Error != nil && !errors.Is(res.Error, gorm.ErrRecordNotFound) {
-		c.LogError(res.Error.Error())
+		c.GetLogger().Error(res.Error.Error())
 		return c.Response.SetStatusCode(http.StatusInternalServerError).Json(c.MapToJson(map[string]string{
-			"status":  "error",
 			"message": "internal error",
 		}))
 	}
-	if (user != models.User{}) {
+
+	if res.Error == nil {
 		return c.Response.SetStatusCode(http.StatusUnprocessableEntity).Json(c.MapToJson(map[string]string{
-			"status":  "error",
-			"message": "email already exist in the database",
+			"message": "email already exists in the database",
 		}))
 	}
 
 	// validate the input
-	v := c.GetValidator().Validate(map[string]interface{}{
+	data := map[string]interface{}{
 		"name":     name,
 		"email":    email,
 		"password": password,
-	}, map[string]interface{}{
+	}
+	rules := map[string]interface{}{
 		"name":     "required|alphaNumeric",
 		"email":    "required|email",
 		"password": "required|length:6,10",
-	})
+	}
+	v := c.GetValidator().Validate(data, rules)
 
 	if v.Failed() {
+		c.GetLogger().Error(v.GetErrorMessagesJson())
 		return c.Response.SetStatusCode(http.StatusUnprocessableEntity).Json(v.GetErrorMessagesJson())
 	}
 
 	//hash the password
 	passwordHashed, err := c.GetHashing().HashPassword(c.CastToString(password))
 	if err != nil {
+		c.GetLogger().Error(err.Error())
 		return c.Response.SetStatusCode(http.StatusUnprocessableEntity).Json(c.MapToJson(map[string]interface{}{
-			"status":  "error",
 			"message": err.Error(),
 		}))
 	}
@@ -65,8 +69,8 @@ func Signup(c *core.Context) *core.Response {
 	}
 	res = c.GetGorm().Create(&user)
 	if res.Error != nil {
+		c.GetLogger().Error(res.Error.Error())
 		return c.Response.SetStatusCode(http.StatusInternalServerError).Json(c.MapToJson(map[string]string{
-			"status":  "error",
 			"message": res.Error.Error(),
 		}))
 	}
@@ -75,14 +79,13 @@ func Signup(c *core.Context) *core.Response {
 		"userStruct": user,
 	}})
 	if err != nil {
+		c.GetLogger().Error(err.Error())
 		return c.Response.SetStatusCode(http.StatusInternalServerError).Json(c.MapToJson(map[string]string{
-			"status":  "error",
 			"message": "internal error",
 		}))
 	}
 
 	return c.Response.Json(c.MapToJson(map[string]string{
-		"status":  "success",
 		"message": "user created successfully",
 	}))
 }
@@ -91,65 +94,72 @@ func Signin(c *core.Context) *core.Response {
 	email := c.GetRequestParam("email")
 	password := c.GetRequestParam("password")
 
-	v := c.GetValidator().Validate(map[string]interface{}{
+	data := map[string]interface{}{
 		"email":    email,
 		"password": password,
-	}, map[string]interface{}{
+	}
+	rules := map[string]interface{}{
 		"email":    "required|email",
 		"password": "required",
-	})
+	}
+	v := c.GetValidator().Validate(data, rules)
 
 	if v.Failed() {
-		return c.Response.SetStatusCode(http.StatusOK).Json(v.GetErrorMessagesJson())
+		return c.Response.SetStatusCode(http.StatusUnprocessableEntity).Json(v.GetErrorMessagesJson())
 	}
 
 	var user models.User
 	res := c.GetGorm().Where("email = ?", c.CastToString(email)).First(&user)
 	if res.Error != nil && !errors.Is(res.Error, gorm.ErrRecordNotFound) {
-		c.LogError(res.Error.Error())
+		c.GetLogger().Error(res.Error.Error())
 		return c.Response.SetStatusCode(http.StatusInternalServerError).Json(c.MapToJson(map[string]string{
-			"status":  "error",
 			"message": "internal server error",
 		}))
 	}
 
 	if res.Error != nil && errors.Is(res.Error, gorm.ErrRecordNotFound) {
 		return c.Response.SetStatusCode(http.StatusUnprocessableEntity).Json(c.MapToJson(map[string]string{
-			"status":  "error",
-			"message": "wrong email or password",
+			"message": "invalid email or password",
 		}))
 	}
 
 	ok, err := c.GetHashing().CheckPasswordHash(user.Password, c.CastToString(password))
 	if err != nil {
-		c.LogError(err.Error())
+		c.GetLogger().Error(err.Error())
 		return c.Response.SetStatusCode(http.StatusInternalServerError).Json(c.MapToJson(map[string]string{
-			"status":  "error",
 			"message": err.Error(),
 		}))
 	}
 
 	if !ok {
 		return c.Response.SetStatusCode(http.StatusUnprocessableEntity).Json(c.MapToJson(map[string]string{
-			"status":  "error",
-			"message": "wrong email or password",
+			"message": "invalid email or password",
 		}))
 	}
 
 	token, err := c.GetJWT().GenerateToken(map[string]interface{}{
-		"id": user.ID,
+		"userID": user.ID,
 	})
 
 	if err != nil {
-		c.LogError(err.Error())
+		c.GetLogger().Error(err.Error())
 		return c.Response.SetStatusCode(http.StatusInternalServerError).Json(c.MapToJson(map[string]string{
-			"status":  "error",
 			"message": "internal server error",
 		}))
 	}
+	// cache the token
+	userAgent := c.Request.HttpRequest.UserAgent()
+	cacheKey := fmt.Sprintf("userid:_%v_useragent:_%v_jwt_token", user.ID, userAgent)
+	hashedCacheKey := c.CastToString(fmt.Sprintf("%x", md5.Sum([]byte(cacheKey))))
+	err = c.GetCache().Set(hashedCacheKey, token)
+	if err != nil {
+		return c.Response.SetStatusCode(http.StatusInternalServerError).Json(c.MapToJson(map[string]interface{}{
+			"message": err.Error(),
+		}))
+	}
+
 	return c.Response.Json(c.MapToJson(map[string]string{
-		"status": "success",
-		"token":  token,
+		"token": token,
 	}))
 }
 
