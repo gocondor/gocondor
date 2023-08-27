@@ -18,6 +18,8 @@ func registerEvents() {
 	//########################################
 
 	// register your event here here ...
-	eventsManager.Register(events.USER_REGISTERED, eventjobs.SendEmail)
+	eventsManager.Register(events.USER_REGISTERED, eventjobs.SendWelcomeEmail)
 	eventsManager.Register(events.USER_REGISTERED, eventjobs.TestEvent)
+	eventsManager.Register(events.USER_PASSWORD_RESET_REQUESTED, eventjobs.SendResetPasswordEmail)
+	eventsManager.Register(events.PASSWORD_CHANGED, eventjobs.SendPasswordChangedEmail)
 }
