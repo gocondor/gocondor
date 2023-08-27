@@ -7,6 +7,7 @@ package main
 import (
 	"github.com/gocondor/core"
 	"github.com/gocondor/gocondor/handlers"
+	"github.com/gocondor/gocondor/middlewares"
 )
 
 // Register the app routes
@@ -19,6 +20,9 @@ func registerRoutes() {
 	// Define your routes here...
 	router.Get("/", handlers.WelcomeHome)
 	// Uncomment the lines below to enable authentication
-	// router.Post("/signup", handlers.Signup)
-	// router.Post("/signin", handlers.Signin)
+	router.Post("/signup", handlers.Signup)
+	router.Post("/signin", handlers.Signin)
+	router.Post("/reset-password", handlers.ResetPasswordRequest)
+	router.Post("/reset-password/code/:code", handlers.SetNewPassword)
+	router.Get("/dashboard", handlers.WelcomeToDashboard, middlewares.AuthCheck)
 }

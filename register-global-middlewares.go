@@ -4,11 +4,6 @@
 
 package main
 
-import (
-	"github.com/gocondor/core"
-	"github.com/gocondor/gocondor/middlewares"
-)
-
 // Register middlewares globally
 func registerGlobalMiddlewares() {
 	//########################################
@@ -16,5 +11,5 @@ func registerGlobalMiddlewares() {
 	//########################################
 
 	// Register global middlewares here ...
-	core.UseMiddleware(middlewares.AnotherExampleMiddleware)
+	// core.UseMiddleware(middlewares.AnotherExampleMiddleware)
 }
