@@ -7,8 +7,7 @@ package main
 import (
 	"log"
 	"os"
-
-	"path/filepath"
+	"path"
 
 	"github.com/gocondor/core"
 	"github.com/gocondor/core/env"
@@ -21,6 +20,12 @@ import (
 // The main function
 func main() {
 	app := core.New()
+	basePath, err := os.Getwd()
+	if err != nil {
+		log.Fatal("error getting current working dir")
+	}
+	app.SetBasePath(basePath)
+	app.MakeDirs("logs", "storage", "storage/sqlite", "tls")
 	// Handle the reading of the .env file
 	if config.GetEnvFileConfig().UseDotEnvFile {
 		envVars, err := godotenv.Read(".env")
@@ -30,13 +35,8 @@ func main() {
 		env.SetEnvVars(envVars)
 	}
 	// Handle the logs
-	path, err := filepath.Abs("./logs/app.log")
-	os.MkdirAll(filepath.Dir(path), 644)
-	if err != nil {
-		panic(err)
-	}
 	app.SetLogsDriver(&logger.LogFileDriver{
-		FilePath: path,
+		FilePath: path.Join(basePath, "logs/app.log"),
 	})
 	app.SetRequestConfig(config.GetRequestConfig())
 	app.SetGormConfig(config.GetGormConfig())
@@ -45,6 +45,6 @@ func main() {
 	registerGlobalMiddlewares()
 	registerRoutes()
 	registerEvents()
-	runAutoMigrations()
+	RunAutoMigrations()
 	app.Run(httprouter.New())
 }
