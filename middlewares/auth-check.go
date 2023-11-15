@@ -28,7 +28,7 @@ var AuthCheck core.Middleware = func(c *core.Context) {
 		})).ForceSendResponse()
 		return
 	}
-	userAgent := c.Request.HttpRequest.UserAgent()
+	userAgent := c.GetUserAgent()
 	cacheKey := fmt.Sprintf("userid:_%v_useragent:_%v_jwt_token", payload["userID"], userAgent)
 	hashedCacheKey := c.CastToString(fmt.Sprintf("%x", md5.Sum([]byte(cacheKey))))
 
