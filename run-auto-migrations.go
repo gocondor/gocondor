@@ -9,7 +9,7 @@ import (
 	"github.com/gocondor/gocondor/models"
 )
 
-func runAutoMigrations() {
+func RunAutoMigrations() {
 	db := core.ResolveGorm()
 	//##############################
 	//# Models auto migration  #####
