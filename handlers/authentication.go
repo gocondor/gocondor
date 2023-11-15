@@ -1,6 +1,6 @@
-// // Copyright 2023 Harran Ali <harran.m@gmail.com>. All rights reserved.
-// // Use of this source code is governed by MIT-style
-// // license that can be found in the LICENSE file.
+// Copyright 2023 Harran Ali <harran.m@gmail.com>. All rights reserved.
+// Use of this source code is governed by MIT-style
+// license that can be found in the LICENSE file.
 
 package handlers
 
@@ -90,8 +90,9 @@ func Signup(c *core.Context) *core.Response {
 			"message": "internal server error",
 		}))
 	}
+
 	// cache the token
-	userAgent := c.Request.HttpRequest.UserAgent()
+	userAgent := c.GetUserAgent()
 	cacheKey := fmt.Sprintf("userid:_%v_useragent:_%v_jwt_token", user.ID, userAgent)
 	hashedCacheKey := c.CastToString(fmt.Sprintf("%x", md5.Sum([]byte(cacheKey))))
 	err = c.GetCache().Set(hashedCacheKey, token)
@@ -177,7 +178,7 @@ func Signin(c *core.Context) *core.Response {
 		}))
 	}
 	// cache the token
-	userAgent := c.Request.HttpRequest.UserAgent()
+	userAgent := c.GetUserAgent()
 	cacheKey := fmt.Sprintf("userid:_%v_useragent:_%v_jwt_token", user.ID, userAgent)
 	hashedCacheKey := c.CastToString(fmt.Sprintf("%x", md5.Sum([]byte(cacheKey))))
 	err = c.GetCache().Set(hashedCacheKey, token)
