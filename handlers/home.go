@@ -14,6 +14,7 @@ func WelcomeHome(c *core.Context) *core.Response {
 	return c.Response.Json(message)
 }
 
+// Show dashboard
 func WelcomeToDashboard(c *core.Context) *core.Response {
 	message := "{\"message\": \"Welcome to Dashboard\"}"
 	return c.Response.Json(message)
