@@ -260,9 +260,9 @@ func SetNewPassword(c *core.Context) *core.Response {
 			"message": "invalid link",
 		}))
 	}
-	var linkCode map[string]string
+	var linkCode map[string]interface{}
 	json.Unmarshal([]byte(linkCodeDataStr), &linkCode)
-	expiresAtUnix, err := strconv.ParseInt(linkCode["expiresAt"], 10, 64)
+	expiresAtUnix, err := strconv.ParseInt(c.CastToString(linkCode["expiresAt"]), 10, 64)
 	if err != nil {
 		c.GetLogger().Error(err.Error())
 		return c.Response.SetStatusCode(http.StatusUnprocessableEntity).Json(c.MapToJson(map[string]string{
@@ -275,7 +275,7 @@ func SetNewPassword(c *core.Context) *core.Response {
 			"message": "invalid link",
 		}))
 	}
-	userID, err := strconv.ParseUint(linkCode["userID"], 10, 64)
+	userID, err := strconv.ParseUint(c.CastToString(linkCode["userID"]), 10, 64)
 	if err != nil {
 		c.GetLogger().Error(err.Error())
 		return c.Response.SetStatusCode(http.StatusUnprocessableEntity).Json(c.MapToJson(map[string]string{
