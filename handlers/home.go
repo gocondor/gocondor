@@ -13,8 +13,3 @@ func WelcomeHome(c *core.Context) *core.Response {
 	message := "{\"message\": \"Welcome to GoCondor\"}"
 	return c.Response.Json(message)
 }
-
-func WelcomeToDashboard(c *core.Context) *core.Response {
-	message := "{\"message\": \"Welcome to Dashboard\"}"
-	return c.Response.Json(message)
-}
