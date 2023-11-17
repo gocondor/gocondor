@@ -22,25 +22,27 @@ GoCondor is a [Go](https://go.dev) web framework made for building web APIs, sui
 ## Installation
 To create a new `GoCondor` project you need to install the `GoCondor's cli` first
 
-##### Install GoCondor cli globally
-To install the `gocondor cli` globally open up your terminal and run the following command:
+##### Install Gaffer  [GoCondor's cli] tool globally
+To install the `gaffer` globally open up your terminal and run the following command:
 ```bash
-go install github.com/gocondor/cli/gocondor@latest
+go install github.com/gocondor/gaffer@latest
 ```
 
-##### Create a new project:
-Here is how you can create new projects:
+##### Create new project using Gaffer
+Here is how you can create new `goCondor` projects using `gaffer`
 ```bash
-gocondor new [project-name] [remote-location]
-# example:
-# gocondor new my-project github.com/gocondor/my-project
+gaffer new [project-name] [project-remote-repository]
+```
+Example
+```bash
+gaffer new myapp github.com/gocondor/myapp
 ```
 where:
 `project-name` is the name of your project
-`remote-location` is the remote repository that will host the project, typically `github.com` is used
+`remote-repository` is the remote repository that will host the project, usually `github.com` is used.
 
 ## Getting started
-First make sure you have [GoCondor's cli](https://gocondor.github.io/docs/installation) installed.
+First make sure you have [Gaffer](https://gocondor.github.io/docs/gaffer) installed, then use it to create a new project, [here is how](https://gocondor.github.io/docs/gaffer#create-new-project-using-gaffer)
 
 Let's create a route that returns `hello world`
 
