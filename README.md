@@ -75,18 +75,21 @@ then `GoCondor` locates the matching [handler](https://gocondor.github.io/docs/h
 ```bash
 ├── gocondor
 │   ├── config/ --------------------------> main configs
+│   ├── events/ --------------------------> contains events
+│	│	├── jobs/ ------------------------> contains the event jobs
 │   ├── handlers/ ------------------------> route's handlers
 │   ├── logs/ ----------------------------> app log files
 │   ├── middlewares/ ---------------------> app middlewares
 │   ├── models/ --------------------------> database models
-│   ├── tls/ -----------------------------> tls certificates
 │   ├── storage/ -------------------------> a place to store files
+│   ├── tls/ -----------------------------> tls certificates
 │   ├── .env -----------------------------> environment variables 
 │   ├── .gitignore -----------------------> .gitignore
 │   ├── go.mod ---------------------------> Go modules
 │   ├── LICENSE --------------------------> license
 │   ├── main.go --------------------------> go main file
 │   ├── README.md ------------------------> readme file
+│   ├── register-events.go ---------------> register events and jobs
 │   ├── register-global-middlewares.go ---> register global middlewares
 │   ├── routes.go ------------------------> app routes
 │   ├── run-auto-migrations.go -----------> database migrations
