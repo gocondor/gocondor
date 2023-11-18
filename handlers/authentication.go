@@ -11,6 +11,7 @@ import (
 	"fmt"
 	"net/http"
 	"strconv"
+	"strings"
 	"time"
 
 	"github.com/gocondor/core"
@@ -359,5 +360,35 @@ func SetNewPassword(c *core.Context) *core.Response {
 
 	return c.Response.Json(c.MapToJson(map[string]string{
 		"message": "password changed successfully",
+	}))
+}
+
+func Signout(c *core.Context) *core.Response {
+	tokenRaw := c.GetHeader("Authorization")
+	token := strings.TrimSpace(strings.Replace(tokenRaw, "Bearer", "", 1))
+	if token == "" {
+		return c.Response.SetStatusCode(http.StatusUnauthorized).Json(c.MapToJson(map[string]interface{}{
+			"message": "unauthorized",
+		}))
+	}
+	payload, err := c.GetJWT().DecodeToken(token)
+	if err != nil {
+		return c.Response.SetStatusCode(http.StatusUnauthorized).Json(c.MapToJson(map[string]interface{}{
+			"message": "unauthorized",
+		}))
+	}
+	userAgent := c.GetUserAgent()
+	cacheKey := fmt.Sprintf("userid:_%v_useragent:_%v_jwt_token", payload["userID"], userAgent)
+	hashedCacheKey := c.CastToString(fmt.Sprintf("%x", md5.Sum([]byte(cacheKey))))
+
+	err = c.GetCache().Delete(hashedCacheKey)
+	if err != nil {
+		return c.Response.SetStatusCode(http.StatusInternalServerError).Json(c.MapToJson(map[string]interface{}{
+			"message": "internal error",
+		}))
+	}
+
+	return c.Response.SetStatusCode(http.StatusOK).Json(c.MapToJson(map[string]interface{}{
+		"message": "signed out successfully",
 	}))
 }
