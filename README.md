@@ -76,7 +76,7 @@ then `GoCondor` locates the matching [handler](https://gocondor.github.io/docs/h
 ├── gocondor
 │   ├── config/ --------------------------> main configs
 │   ├── events/ --------------------------> contains events
-│	│	├── jobs/ ------------------------> contains the event jobs
+│   │   ├── jobs/ ------------------------> contains the event jobs
 │   ├── handlers/ ------------------------> route's handlers
 │   ├── logs/ ----------------------------> app log files
 │   ├── middlewares/ ---------------------> app middlewares
