@@ -1,14 +1,13 @@
 package middlewares
 
 import (
-	"crypto/md5"
 	"errors"
-	"fmt"
 	"net/http"
 	"strings"
 
 	"github.com/gocondor/core"
 	"github.com/gocondor/gocondor/models"
+	"github.com/gocondor/gocondor/utils"
 	"gorm.io/gorm"
 )
 
@@ -29,12 +28,18 @@ var AuthCheck core.Middleware = func(c *core.Context) {
 		return
 	}
 	userAgent := c.GetUserAgent()
-	cacheKey := fmt.Sprintf("userid:_%v_useragent:_%v_jwt_token", payload["userID"], userAgent)
-	hashedCacheKey := c.CastToString(fmt.Sprintf("%x", md5.Sum([]byte(cacheKey))))
+	hashedCacheKey := utils.CreateAuthTokenHashedCacheKey(uint(c.CastToInt(payload["userID"])), userAgent)
 
-	_, err = c.GetCache().Get(hashedCacheKey)
+	cachedToken, err := c.GetCache().Get(hashedCacheKey)
 	if err != nil {
 		// user signed out
+		c.Response.SetStatusCode(http.StatusUnauthorized).Json(c.MapToJson(map[string]interface{}{
+			"message": "unauthorized",
+		})).ForceSendResponse()
+		return
+	}
+	if cachedToken != token {
+		// using old token replaced with new one after recent signin
 		c.Response.SetStatusCode(http.StatusUnauthorized).Json(c.MapToJson(map[string]interface{}{
 			"message": "unauthorized",
 		})).ForceSendResponse()

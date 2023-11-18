@@ -5,10 +5,8 @@
 package handlers
 
 import (
-	"crypto/md5"
 	"encoding/json"
 	"errors"
-	"fmt"
 	"net/http"
 	"strconv"
 	"strings"
@@ -17,6 +15,7 @@ import (
 	"github.com/gocondor/core"
 	"github.com/gocondor/gocondor/events"
 	"github.com/gocondor/gocondor/models"
+	"github.com/gocondor/gocondor/utils"
 	"github.com/google/uuid"
 	"gorm.io/gorm"
 )
@@ -94,8 +93,7 @@ func Signup(c *core.Context) *core.Response {
 
 	// cache the token
 	userAgent := c.GetUserAgent()
-	cacheKey := fmt.Sprintf("userid:_%v_useragent:_%v_jwt_token", user.ID, userAgent)
-	hashedCacheKey := c.CastToString(fmt.Sprintf("%x", md5.Sum([]byte(cacheKey))))
+	hashedCacheKey := utils.CreateAuthTokenHashedCacheKey(user.ID, userAgent)
 	err = c.GetCache().Set(hashedCacheKey, token)
 	if err != nil {
 		c.GetLogger().Error(err.Error())
@@ -180,8 +178,7 @@ func Signin(c *core.Context) *core.Response {
 	}
 	// cache the token
 	userAgent := c.GetUserAgent()
-	cacheKey := fmt.Sprintf("userid:_%v_useragent:_%v_jwt_token", user.ID, userAgent)
-	hashedCacheKey := c.CastToString(fmt.Sprintf("%x", md5.Sum([]byte(cacheKey))))
+	hashedCacheKey := utils.CreateAuthTokenHashedCacheKey(user.ID, userAgent)
 	err = c.GetCache().Set(hashedCacheKey, token)
 	if err != nil {
 		c.GetLogger().Error(err.Error())
@@ -378,8 +375,7 @@ func Signout(c *core.Context) *core.Response {
 		}))
 	}
 	userAgent := c.GetUserAgent()
-	cacheKey := fmt.Sprintf("userid:_%v_useragent:_%v_jwt_token", payload["userID"], userAgent)
-	hashedCacheKey := c.CastToString(fmt.Sprintf("%x", md5.Sum([]byte(cacheKey))))
+	hashedCacheKey := utils.CreateAuthTokenHashedCacheKey(uint(c.CastToInt(payload["userID"])), userAgent)
 
 	err = c.GetCache().Delete(hashedCacheKey)
 	if err != nil {
