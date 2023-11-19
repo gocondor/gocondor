@@ -45,6 +45,8 @@ func main() {
 	registerGlobalMiddlewares()
 	registerRoutes()
 	registerEvents()
-	RunAutoMigrations()
+	if config.GetGormConfig().EnableGorm == true {
+		RunAutoMigrations()
+	}
 	app.Run(httprouter.New())
 }
