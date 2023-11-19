@@ -22,7 +22,7 @@ GoCondor is a [Go](https://go.dev) web framework made for building web APIs, sui
 ## Installation
 To create a new `GoCondor` project you need to install the `GoCondor's cli` first
 
-##### Install Gaffer  [GoCondor's cli] tool globally
+##### Install Gaffer  [GoCondor's cli] tool
 To install the `gaffer` globally open up your terminal and run the following command:
 ```bash
 go install github.com/gocondor/gaffer@latest
