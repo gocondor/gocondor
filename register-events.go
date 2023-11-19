@@ -7,7 +7,7 @@ package main
 import (
 	"github.com/gocondor/core"
 	"github.com/gocondor/gocondor/events"
-	eventjobs "github.com/gocondor/gocondor/events/jobs"
+	"github.com/gocondor/gocondor/events/eventjobs"
 )
 
 // Register events
