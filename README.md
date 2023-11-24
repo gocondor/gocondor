@@ -28,6 +28,9 @@ To install the `gaffer` globally open up your terminal and run the following com
 go install github.com/gocondor/gaffer@latest
 ```
 
+![installing](https://gocondor.github.io/img/installing.gif)
+
+
 ##### Create new project using Gaffer
 Here is how you can create new `goCondor` projects using `gaffer`
 ```bash
